@@ -90,7 +90,7 @@
 (add-hook 'after-init-hook 'session-initialize)
 
 ;; フォント変更->Ricty
-(let* ((size 14)
+(let* ((size 12)
            (asciifont "Ricty") ; ASCII fonts
            (jpfont "Ricty") ; Japanese fonts
            (h (* size 10))
@@ -194,6 +194,8 @@
 ;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
 (ac-config-default)
 (add-to-list 'ac-modes 'text-mode)
+(add-to-list 'ac-modes 'web-mode)       ;; web-modeで自動的に有効にする
+(add-to-list 'ac-modes 'emmet-mode)     ;; emmet-modeで自動的に有効にする
 
 ;; Emmet
 (require 'emmet-mode)
@@ -225,6 +227,9 @@
 (add-to-list 'auto-mode-alist '("\\.as[cp]x$"   . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+
 ;; インデント関係
 (defun web-mode-hook ()
 ;;  "Hooks for Web mode."
@@ -237,4 +242,4 @@
   (setq indent-tabs-mode t)
   (setq tab-width 4))
 (add-hook 'web-mode-hook 'web-mode-hook)
-(add-hook 'emmet-mode-hook 'web-mode)
+(add-hook 'emmet-mode-hook 'web-mode-hock)
