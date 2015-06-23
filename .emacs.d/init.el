@@ -4,6 +4,20 @@
 
 ;; ロードパス
 (add-to-list 'load-path "~/.emacs.d/elpa/")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+
+;; homebrwe でインストールしたツールを使う
+(add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
+
+;; auto-install
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
+(require 'auto-install)
+(auto-install-update-emacswiki-package-name t)
+(auto-install-compatibility-setup)
+
+;; anything
+(require 'anything-startup)
+(define-key global-map (kbd "C-x C-a") 'anything)
 
 ;; 対応する括弧を光らせる
 (show-paren-mode 1)
@@ -56,7 +70,8 @@
 (package-initialize)
 
 ;; タブ幅を4に設定
-(setq-default tab-width 4)
+(setq-default tab-width 4 indent-tabs-mode nil)
+
 ;; タブ幅の倍数を設定
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
 
@@ -90,7 +105,7 @@
 (add-hook 'after-init-hook 'session-initialize)
 
 ;; フォント変更->Ricty
-(let* ((size 12)
+(let* ((size 14)
            (asciifont "Ricty") ; ASCII fonts
            (jpfont "Ricty") ; Japanese fonts
            (h (* size 10))
@@ -179,6 +194,28 @@
 ;;  (set-face-background 'mode-line-inactive "gray85")
 ))
 
+;; C-aで行頭とインデントを飛ばした行頭を行き来する
+(global-set-key "\C-a" 'beggining-of-indented-line)
+(defun beggining-of-indented-line (current-point)
+  (interactive "d")
+  (if (string-match
+       "^[ \t]+$"
+       (save-excursion
+         (buffer-substring-no-properties
+          (progn (beginning-of-line) (point))
+          current-point)))
+      (beginning-of-line)
+    (back-to-indentation)))
+
+;; emacs終了時に確認する
+(setq confirm-kill-emacs 'y-or-n-p)
+
+;; emacs終了前に行末の空白を削除
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; 最終行に必ず一行挿入する
+(setq require-final-newline t)
+
 
 ;;  -------------------
 ;; |   各モード設定    |
@@ -194,8 +231,6 @@
 ;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
 (ac-config-default)
 (add-to-list 'ac-modes 'text-mode)
-(add-to-list 'ac-modes 'web-mode)       ;; web-modeで自動的に有効にする
-(add-to-list 'ac-modes 'emmet-mode)     ;; emmet-modeで自動的に有効にする
 
 ;; Emmet
 (require 'emmet-mode)
@@ -217,6 +252,7 @@
 "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(custom-set-variables '(markdown-command "/usr/local/bin/pandoc"))
 
 ;; web-mode
 (require 'web-mode)
@@ -227,9 +263,6 @@
 (add-to-list 'auto-mode-alist '("\\.as[cp]x$"   . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-
 ;; インデント関係
 (defun web-mode-hook ()
 ;;  "Hooks for Web mode."
@@ -239,7 +272,42 @@
   (setq web-mode-php-offset    4)
   (setq web-mode-java-offset   4)
   (setq web-mode-asp-offset    4)
+  (setq web-mode-code-offset   4)
   (setq indent-tabs-mode t)
   (setq tab-width 4))
 (add-hook 'web-mode-hook 'web-mode-hook)
+<<<<<<< HEAD
 (add-hook 'emmet-mode-hook 'web-mode-hock)
+
+;; scss-mode
+(require 'scss-mode)
+(add-to-list 'auto-mode-alist '("\\.scss$" . scss-mode))
+;; インデント幅を2にする
+;; コンパイルは compass watchで行うので自動コンパイルをオフ
+(defun scss-custom ()
+  "scss-mode-hook"
+  (and
+   (set (make-local-variable 'css-indent-offset) 2)
+   (set (make-local-variable 'scss-compile-at-save) nil)
+   )
+  )
+(add-hook 'scss-mode-hook
+  '(lambda() (scss-custom)))
+
+;; js2-mode
+(autoload 'js2-mode "js2-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
+;; Go-lang
+(add-to-list 'exec-path (expand-file-name "~/.go/bin"))
+;; auto-complete
+(add-to-list 'load-path "~/.go/src/github.com/nsf/gocode/emacs/")
+(require 'go-autocomplete)
+;; M-. で godef
+(add-hook 'go-mode-hook (lambda () (local-set-key (kbd "M-.") 'godef-jump)))
+;; go-flyake
+(add-to-list 'load-path "~/.go/src/github.com/dougm/goflymake")
+(require 'go-flymake)
+=======
+(add-hook 'emmet-mode-hook 'web-mode)
+>>>>>>> parent of f0a8ea2... 別マシンの設定と結合
