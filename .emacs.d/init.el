@@ -276,7 +276,6 @@
   (setq indent-tabs-mode t)
   (setq tab-width 4))
 (add-hook 'web-mode-hook 'web-mode-hook)
-<<<<<<< HEAD
 (add-hook 'emmet-mode-hook 'web-mode-hock)
 
 ;; scss-mode
@@ -308,6 +307,3 @@
 ;; go-flyake
 (add-to-list 'load-path "~/.go/src/github.com/dougm/goflymake")
 (require 'go-flymake)
-=======
-(add-hook 'emmet-mode-hook 'web-mode)
->>>>>>> parent of f0a8ea2... 別マシンの設定と結合
