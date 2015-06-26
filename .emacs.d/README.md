@@ -114,7 +114,7 @@ $ emacs -batch -f batch-byte-compile js2-mode.el
 ```
 
 ## Go-lang
-* M-x package-list-packages で go-mode をインストール
+### M-x package-list-packages で go-mode をインストール
 * homebrew で入れたコマンドも使えるように homebrew のパスを追加
 
 ```
@@ -128,7 +128,7 @@ $ emacs -batch -f batch-byte-compile js2-mode.el
 (add-to-list 'exec-path (expand-file-name "~/.go/bin"))
 ```
 
-* Go-lang 用の autocomplete を設定
+### Go-lang 用の autocomplete を設定
 * gocode をインストール
   
 ```
@@ -144,7 +144,7 @@ $ go get -u github.com/nsf/gocode
 ```
 
 
-* M-. で godef が効くようにする
+### M-. で godef が効くようにする
 * godef をインストール
 
 ```
@@ -155,4 +155,12 @@ $ go get code.google.com/p/rog-go/exp/cmd/godef
 
 ```
 (add-hook 'go-mode-hook (lambda () (local-set-key (kbd "M-.") 'godef-jump)))
+```
+
+## Flycheck
+* M-x package-list-packages で flycheck をインストール
+* 設定を追加
+
+```
+(add-hook 'after-init-hook #'global-flycheck-mode)
 ```

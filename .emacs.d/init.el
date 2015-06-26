@@ -65,6 +65,7 @@
 
 ;; パッケージ管理を利用
 (require 'package)
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
@@ -307,3 +308,6 @@
 ;; go-flyake
 (add-to-list 'load-path "~/.go/src/github.com/dougm/goflymake")
 (require 'go-flymake)
+
+;; flycheck
+(add-hook 'after-init-hook 'global-flycheck-mode)
