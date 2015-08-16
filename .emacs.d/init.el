@@ -82,14 +82,14 @@
 
 ;; 起動時のサイズ、表示位置、フォントを設定
 (setq initial-frame-alist
-	  (append (list
-			   '(width . 156)
-			   '(height . 72)
-			   '(top . 0)
-			   '(left . 0)
-			   '(right . 0)
-			   )
-			  initial-frame-alist))
+      (append (list
+               '(width . 156)
+               '(height . 72)
+               '(top . 0)
+               '(left . 0)
+               '(right . 0)
+               )
+              initial-frame-alist))
 (setq default-frame-alist initial-frame-alist)
 
 ;; 1行ずつスクロールする
