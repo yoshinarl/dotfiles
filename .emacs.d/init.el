@@ -11,8 +11,10 @@
 
 ;; auto-install
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
+(add-to-list 'load-path "~/.emacs.d/auto-install/")
 (require 'auto-install)
 (auto-install-update-emacswiki-package-name t)
+(setq auto-install-directory "~/.emacs.d/auto-install/")
 (auto-install-compatibility-setup)
 
 ;; anything
@@ -28,10 +30,13 @@
 ;; 終了時にオートセーブファイルを消す
 (setq delete-auto-save-files t)
 
-;; optionキーをMetaキーとして利用
+;; 保存時に行末の空白を削除
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;;;;;; optionキーをMetaキーとして利用
 (setq mac-option-modifier 'meta)
 
-;; Returnでオートインデント
+;;;;;; Returnでオートインデント
 (global-set-key "\C-m" 'newline-and-indent)
 
 ;; C-hをBSに
@@ -70,9 +75,8 @@
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
-;; タブ幅を4に設定
+;; タブ幅を4に設定。タブを使わずスペースにする
 (setq-default tab-width 4 indent-tabs-mode nil)
-
 ;; タブ幅の倍数を設定
 (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
 
@@ -106,7 +110,7 @@
 (add-hook 'after-init-hook 'session-initialize)
 
 ;; フォント変更->Ricty
-(let* ((size 14)
+(let* ((size 13)
            (asciifont "Ricty") ; ASCII fonts
            (jpfont "Ricty") ; Japanese fonts
            (h (* size 10))
@@ -147,7 +151,7 @@
                            (interactive)
                            (split-window-horizontally-n 3)))
 
-;; 自動改行しない
+;; 行末が長くなっても自動改行しない
 (add-hook 'yatex-mode-hook'(lambda ()(setq auto-fill-function nil)))
 
 ;; リージョン内の行数と文字数をモードラインに表示する
@@ -172,7 +176,6 @@
 
 ;; 各種色設定
 (if window-system (progn
-
 ;; 文字の色を設定します。
   (add-to-list 'default-frame-alist '(foreground-color . "#EEEEEE"))
   ;; 背景色を設定します。
@@ -195,7 +198,9 @@
 ;;  (set-face-background 'mode-line-inactive "gray85")
 ))
 
-;; C-aで行頭とインデントを飛ばした行頭を行き来する
+;; C-a で空白を除く行頭へ移動
+;; インデント文字を飛ばした行頭に戻る。
+;; ただし、ポイントから行頭までの間にインデント文字しかない場合は、行頭に戻る。
 (global-set-key "\C-a" 'beggining-of-indented-line)
 (defun beggining-of-indented-line (current-point)
   (interactive "d")
@@ -210,9 +215,6 @@
 
 ;; emacs終了時に確認する
 (setq confirm-kill-emacs 'y-or-n-p)
-
-;; emacs終了前に行末の空白を削除
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; 最終行に必ず一行挿入する
 (setq require-final-newline t)
@@ -229,7 +231,7 @@
 
 ;; auto-complete-mode
 (require 'auto-complete-config)
-;(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (ac-config-default)
 (add-to-list 'ac-modes 'text-mode)
 
@@ -248,12 +250,16 @@
 (keyboard-translate ?\C-i ?\H-i) ;;C-i と Tabの被りを回避
 (define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line) ;; C-i で展開
 
+
 ;; markdown-mode
 (autoload 'markdown-mode "markdown-mode"
 "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (custom-set-variables '(markdown-command "/usr/local/bin/pandoc"))
+(add-hook 'markdown-mode-hook
+          '(lambda ()
+             (electric-indent-local-mode -1)))
 
 ;; web-mode
 (require 'web-mode)
@@ -279,9 +285,41 @@
 (add-hook 'web-mode-hook 'web-mode-hook)
 (add-hook 'emmet-mode-hook 'web-mode-hock)
 
+;; python 用インデント設定
+(add-hook 'python-mode-hook
+    '(lambda ()
+;;        (setq indent-line-function 'tab-to-tab-stop)
+        (setq python-indent 4)
+        (setq indent-level 4)
+        (setq indent-tabs-mode nil)
+    ))
+
+;; go-lang 用
+(add-to-list 'exec-path (expand-file-name "~/.go/bin"))
+;; auto-complete
+(add-to-list 'load-path "~/.go/src/github.com/nsf/gocode/emacs/")
+(require 'go-autocomplete)
+;; go-flymake
+(add-to-list 'load-path "~/.go/src/github.com/dougm/goflymake")
+(require 'go-flymake)
+;; M-. で godef
+(add-hook 'go-mode-hook (lambda () (local-set-key (kbd "M-.") 'godef-jump)))
+
+;; js2-mode
+(autoload 'js2-mode "js2-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+;; flycheck
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; jade-mode
+(require 'jade-mode)
+(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
+
 ;; scss-mode
 (require 'scss-mode)
 (add-to-list 'auto-mode-alist '("\\.scss$" . scss-mode))
+
 ;; インデント幅を2にする
 ;; コンパイルは compass watchで行うので自動コンパイルをオフ
 (defun scss-custom ()
@@ -294,20 +332,34 @@
 (add-hook 'scss-mode-hook
   '(lambda() (scss-custom)))
 
-;; js2-mode
-(autoload 'js2-mode "js2-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;; whitespace
+;; 空白関係を可視化させる
+(require 'whitespace)
+(setq whitespace-style '(face           ; faceで可視化
+                         trailing       ; 行末
+                         tabs           ; タブ
+                         empty          ; 先頭/末尾の空行
+                         space-mark     ; 表示のマッピング
+                         tab-mark
+                         ))
 
-;; Go-lang
-(add-to-list 'exec-path (expand-file-name "~/.go/bin"))
-;; auto-complete
-(add-to-list 'load-path "~/.go/src/github.com/nsf/gocode/emacs/")
-(require 'go-autocomplete)
-;; M-. で godef
-(add-hook 'go-mode-hook (lambda () (local-set-key (kbd "M-.") 'godef-jump)))
-;; go-flyake
-(add-to-list 'load-path "~/.go/src/github.com/dougm/goflymake")
-(require 'go-flymake)
+(setq whitespace-display-mappings
+      '((tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
 
-;; flycheck
-(add-hook 'after-init-hook 'global-flycheck-mode)
+(global-whitespace-mode 1)
+
+(defvar my/bg-color "#333333")
+(set-face-attribute 'whitespace-trailing nil
+                    :background my/bg-color
+                    :foreground "DeepPink"
+                    :underline t)
+(set-face-attribute 'whitespace-tab nil
+                    :background my/bg-color
+                    :foreground "LightSkyBlue"
+                    :underline t)
+(set-face-attribute 'whitespace-space nil
+                    :background my/bg-color
+                    :foreground "GreenYellow"
+                    :weight 'bold)
+(set-face-attribute 'whitespace-empty nil
+                    :background my/bg-color)
