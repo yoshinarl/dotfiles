@@ -280,7 +280,7 @@
   (setq web-mode-java-offset   4)
   (setq web-mode-asp-offset    4)
   (setq web-mode-code-offset   4)
-  (setq indent-tabs-mode t)
+  (setq indent-tabs-mode nil)
   (setq tab-width 4))
 (add-hook 'web-mode-hook 'web-mode-hook)
 (add-hook 'emmet-mode-hook 'web-mode-hock)
@@ -304,6 +304,8 @@
 (require 'go-flymake)
 ;; M-. で godef
 (add-hook 'go-mode-hook (lambda () (local-set-key (kbd "M-.") 'godef-jump)))
+;; インデントをスペースに
+(add-hook 'go-mode-hook(function (lambda () (setq indent-tabs-mode nil))))
 
 ;; js2-mode
 (autoload 'js2-mode "js2-mode" nil t)
