@@ -210,3 +210,13 @@ $ go get code.google.com/p/rog-go/exp/cmd/godef
 (require 'alchemist)
 (add-hook 'elixir-mode-hook 'ac-alchemist-setup)
 ```
+
+## csv-mode
+* M-x package-list-packages で csv-mode をインストール
+* 設定を追加
+
+```
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+(autoload 'csv-mode "csv-mode"
+  "Major mode for editing comma-separated value files." t)
+```
