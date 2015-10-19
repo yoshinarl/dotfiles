@@ -28,7 +28,7 @@ $ emacs --batch -Q -f batch-byte-compile auto-install.el
 
 *  ~/.emacsに設定を追加します。
   * 下記を追記
- 
+
 ```
 ;; auto-install
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
@@ -43,7 +43,7 @@ $ emacs --batch -Q -f batch-byte-compile auto-install.el
 ## anything を入れる
 * パッケージをインストールする
   * M-x auto-install-batchを実行して、パッケージ名としてanythingを入力するとanything.elに必要なファイル(複数)をダウンロードしてくれます。あとはダウンロードしたファイル名が次々と表示されるので、C-c C-cでバイトコンパイルすればインストールされます。
-  
+
 
 * emacsに設定を追加する
   * M-x anythingとタイプすると、anything.elが起動。
@@ -60,7 +60,7 @@ $ emacs --batch -Q -f batch-byte-compile auto-install.el
 ## markdown mode
 * M-x package-list-packagesでパッケージの一覧を表示し、markdown-modeにIを押してインストールマークを付けた後Xキーを押してインストールを実行する
   * ただし、PC に markdown コマンドがない場合は別途入れる
-  
+
 ```
 ;; markdown-mode
 (autoload 'markdown-mode "markdown-mode"
@@ -68,7 +68,7 @@ $ emacs --batch -Q -f batch-byte-compile auto-install.el
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 ```
-  
+
 * C-c C-c p でプレビューを開く際に、なぜか command not found markdown と言われるので、pandoc コマンドを入れて下記を設定に追加
 
 ```
@@ -130,7 +130,7 @@ $ emacs -batch -f batch-byte-compile js2-mode.el
 
 ### Go-lang 用の autocomplete を設定
 * gocode をインストール
-  
+
 ```
 $ go get -u github.com/nsf/gocode
 ```
@@ -199,4 +199,14 @@ $ go get code.google.com/p/rog-go/exp/cmd/godef
                     :weight 'bold)
 (set-face-attribute 'whitespace-empty nil
                     :background my/bg-color)
+```
+
+## elixir-mode
+* M-x package-list-packages で elixir-mode, alchemist をインストール
+* 設定を追加
+
+```
+(require 'elixir-mode)
+(require 'alchemist)
+(add-hook 'elixir-mode-hook 'ac-alchemist-setup)
 ```
