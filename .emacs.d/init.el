@@ -222,6 +222,29 @@
 ;; ファイルに変更があったら自動で再読み込みする
 (global-auto-revert-mode 1)
 
+;; 行の移動を実装
+;; Shift-Alt-p: 上へ移動
+;; Shift-Alt-n: 下へ移動
+(defun move-line-down ()
+  (interactive)
+  (let ((col (current-column)))
+    (save-excursion
+      (forward-line)
+      (transpose-lines 1))
+    (forward-line)))
+
+(defun move-line-up ()
+  (interactive)
+  (let ((col (current-column)))
+    (save-excursion
+      (forward-line)
+      (transpose-lines -1))
+    (move-to-column col)
+    (previous-line)))
+
+(global-set-key (kbd "M-P") 'move-line-up)
+(global-set-key (kbd "M-N") 'move-line-down)
+
 ;;  -------------------
 ;; |   各モード設定    |
 ;;  -------------------
