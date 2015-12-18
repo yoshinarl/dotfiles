@@ -219,6 +219,8 @@
 ;; 最終行に必ず一行挿入する
 (setq require-final-newline t)
 
+;; ファイルに変更があったら自動で再読み込みする
+(global-auto-revert-mode 1)
 
 ;;  -------------------
 ;; |   各モード設定    |
