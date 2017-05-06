@@ -13,7 +13,7 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
 (add-to-list 'load-path "~/.emacs.d/auto-install/")
 (require 'auto-install)
-(auto-install-update-emacswiki-package-name t)
+;(auto-install-update-emacswiki-package-name t)
 (setq auto-install-directory "~/.emacs.d/auto-install/")
 (auto-install-compatibility-setup)
 
@@ -83,8 +83,8 @@
 ;; 起動時のサイズ、表示位置、フォントを設定
 (setq initial-frame-alist
       (append (list
-               '(width . 156)
-               '(height . 72)
+               '(width . 97)
+               '(height . 60)
                '(top . 0)
                '(left . 0)
                '(right . 0)
@@ -113,7 +113,7 @@
 (let* ((size 13)
            (asciifont "Ricty") ; ASCII fonts
            (jpfont "Ricty") ; Japanese fonts
-           (h (* size 10))
+           (h (* size 11))
            (fontspec (font-spec :family asciifont))
            (jp-fontspec (font-spec :family jpfont)))
       (set-face-attribute 'default nil :family asciifont :height h)
@@ -305,7 +305,17 @@
 ;; M-. で godef
 (add-hook 'go-mode-hook (lambda () (local-set-key (kbd "M-.") 'godef-jump)))
 ;; インデントをスペースに
-(add-hook 'go-mode-hook(function (lambda () (setq indent-tabs-mode nil))))
+(add-hook 'go-mode-hook
+    '(lambda ()
+        (setq indent-tabs-mode 1)
+        (setq tab-width 2)
+        (setq whitespace-style '(face   ; faceで可視化
+                         trailing       ; 行末
+                         tabs           ; タブ
+                         empty          ; 先頭/末尾の空行
+                         space-mark     ; 表示のマッピング
+                         ))
+     ))
 
 ;; js2-mode
 (autoload 'js2-mode "js2-mode" nil t)
@@ -375,3 +385,30 @@
 (add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (autoload 'csv-mode "csv-mode"
   "Major mode for editing comma-separated value files." t)
+
+;; ruby-mode
+;;(autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
+;;(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
+;;(add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
+;;(add-hook 'enh-ruby-mode-hock (lambda () (setq emmet-indentation 2)))
+(autoload 'enh-ruby-mode "enh-ruby-mode"
+  "Mode for editing ruby source files" t)
+(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Capfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
+;; "encoding を自動挿入しない"
+(defun remove-enh-magic-comment ()
+  (remove-hook 'before-save-hook 'enh-ruby-mode-set-encoding t))
+(add-hook 'enh-ruby-mode-hook 'remove-enh-magic-comment)
+(setq ruby-insert-encoding-magic-comment nil)
+(add-hook 'enh-ruby-mode-hook
+  '(lambda ()
+    (setq ruby-indent-level tab-width)
+    (setq enh-ruby-deep-indent-paren nil)
+    (define-key ruby-mode-map [return] 'ruby-reindent-then-newline-and-indent))
+    (setenv "LC_ALL" "ja_JP.UTF-8"))
+
+
+;; haml-mode
+(require 'haml-mode)
+(add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
