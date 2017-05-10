@@ -6,6 +6,20 @@
 (add-to-list 'load-path "~/.emacs.d/elpa/")
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
+;; 環境変数パス
+(dolist (dir (list
+              "/sbin"
+              "/usr/sbin"
+              "/bin"
+              "/usr/bin"
+              "/usr/local/bin"
+              (expand-file-name "~/bin")
+              (expand-file-name "~/.emacs.d/bin")
+              ))
+ (when (and (file-exists-p dir) (not (member dir exec-path)))
+   (setenv "PATH" (concat dir ":" (getenv "PATH")))
+   (setq exec-path (append (list dir) exec-path))))
+
 ;; homebrwe でインストールしたツールを使う
 (add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
 
@@ -13,7 +27,7 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
 (add-to-list 'load-path "~/.emacs.d/auto-install/")
 (require 'auto-install)
-(auto-install-update-emacswiki-package-name t)
+;(auto-install-update-emacswiki-package-name t)
 (setq auto-install-directory "~/.emacs.d/auto-install/")
 (auto-install-compatibility-setup)
 
@@ -76,15 +90,16 @@
 (package-initialize)
 
 ;; タブ幅を4に設定。タブを使わずスペースにする
-(setq-default tab-width 4 indent-tabs-mode nil)
+;;(setq-default tab-width 4 indent-tabs-mode nil)
 ;; タブ幅の倍数を設定
-(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
+(setq tab-stop-list '(2 4 6 8 10 12 14 16 18 20))
+(setq-default tab-width 2 indent-tabs-mode nil)
 
 ;; 起動時のサイズ、表示位置、フォントを設定
 (setq initial-frame-alist
       (append (list
-               '(width . 156)
-               '(height . 72)
+               '(width . 175)
+               '(height . 110)
                '(top . 0)
                '(left . 0)
                '(right . 0)
@@ -127,7 +142,7 @@
 (setq truncate-partial-width-windows nil)
 
 ;; フレームの3分割
-;;  C-xで縦3分割。C-x#で横3分割
+;;  C-x@で縦3分割。C-x#で横3分割
 (defun split-window-vertically-n (num_wins)
   (interactive "p")
   (if (= num_wins 2)
@@ -245,6 +260,13 @@
 (global-set-key (kbd "M-P") 'move-line-up)
 (global-set-key (kbd "M-N") 'move-line-down)
 
+;; C-z を無効化
+(global-unset-key "\C-z")
+
+;; タイトルバーにファイルのフルパス表示
+(setq frame-title-format
+      (format "%%b - %%f"))
+
 ;;  -------------------
 ;; |   各モード設定    |
 ;;  -------------------
@@ -254,11 +276,21 @@
 (global-linum-mode t)
 (setq linum-format "%5d")
 
+;; hiwin-mode
+;; 非アクティブのバッファの色を変える
+(require 'hiwin)
+(hiwin-activate)                           ;; hiwin-modeを有効化
+(set-face-background 'hiwin-face "#666666") ;; 非アクティブウィンドウの背景色を設定
+
 ;; auto-complete-mode
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
-(add-to-list 'ac-modes 'text-mode)
+(defun load-auto-complete ()
+  (require 'auto-complete-config)
+  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+  (ac-config-default)
+  (add-to-list 'ac-modes 'text-mode)
+  (add-to-list 'ac-modes 'enh-ruby-mode)
+  (setq ac-use-menu-map t)
+  (setq ac-use-fuzzy t))
 
 ;; Emmet
 (require 'emmet-mode)
@@ -281,7 +313,6 @@
 "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(custom-set-variables '(markdown-command "/usr/local/bin/pandoc"))
 (add-hook 'markdown-mode-hook
           '(lambda ()
              (electric-indent-local-mode -1)))
@@ -298,17 +329,17 @@
 ;; インデント関係
 (defun web-mode-hook ()
 ;;  "Hooks for Web mode."
-  (setq web-mode-html-offset   4)
-  (setq web-mode-css-offset    4)
-  (setq web-mode-script-offset 4)
-  (setq web-mode-php-offset    4)
-  (setq web-mode-java-offset   4)
-  (setq web-mode-asp-offset    4)
-  (setq web-mode-code-offset   4)
+  (setq web-mode-html-offset   2)
+  (setq web-mode-css-offset    2)
+  (setq web-mode-script-offset 2)
+  (setq web-mode-php-offset    2)
+  (setq web-mode-java-offset   2)
+  (setq web-mode-asp-offset    2)
+  (setq web-mode-code-offset   2)
   (setq indent-tabs-mode nil)
-  (setq tab-width 4))
+  (setq tab-width 2))
 (add-hook 'web-mode-hook 'web-mode-hook)
-(add-hook 'emmet-mode-hook 'web-mode-hock)
+;; (add-hook 'emmet-mode-hook 'web-mode-hock)
 
 ;; python 用インデント設定
 (add-hook 'python-mode-hook
@@ -325,23 +356,25 @@
 (add-to-list 'load-path "~/.go/src/github.com/nsf/gocode/emacs/")
 (require 'go-autocomplete)
 ;; go-flymake
-(add-to-list 'load-path "~/.go/src/github.com/dougm/goflymake")
-(require 'go-flymake)
+;; (add-to-list 'load-path "~/.go/src/github.com/dougm/goflymake")
+;; (require 'go-flymake)
 ;; M-. で godef
 (add-hook 'go-mode-hook (lambda () (local-set-key (kbd "M-.") 'godef-jump)))
 ;; インデントをスペースに
 (add-hook 'go-mode-hook(function (lambda () (setq indent-tabs-mode nil))))
+;; flycehck
+
 
 ;; js2-mode
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
 ;; flycheck
-(add-hook 'after-init-hook #'global-flycheck-mode)
+;; (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; jade-mode
-(require 'jade-mode)
-(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
+;; ;; jade-mode
+;; (require 'jade-mode)
+;; (add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
 
 ;; scss-mode
 (require 'scss-mode)
@@ -354,6 +387,7 @@
   (and
    (set (make-local-variable 'css-indent-offset) 2)
    (set (make-local-variable 'scss-compile-at-save) nil)
+   (set tab-width 2)
    )
   )
 (add-hook 'scss-mode-hook
@@ -382,7 +416,7 @@
                     :underline t)
 (set-face-attribute 'whitespace-tab nil
                     :background my/bg-color
-                    :foreground "LightSkyBlue"
+                    :foreground "gray36"
                     :underline t)
 (set-face-attribute 'whitespace-space nil
                     :background my/bg-color
@@ -391,12 +425,117 @@
 (set-face-attribute 'whitespace-empty nil
                     :background my/bg-color)
 
-;; elixir-mode
-(require 'elixir-mode)
-(require 'alchemist)
-(add-hook 'elixir-mode-hook 'ac-alchemist-setup)
+;;  ;; elixir-mode
+;;  (require 'elixir-mode)
+;;  (require 'alchemist)
+;;  (add-hook 'elixir-mode-hook 'ac-alchemist-setup)
 
 ;; csv-mode
 (add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (autoload 'csv-mode "csv-mode"
   "Major mode for editing comma-separated value files." t)
+
+;; rbenv-mode
+(require 'rbenv)
+(global-rbenv-mode)
+(setq rbenv-installation-dir "/usr/local/Cellar/rbenv")
+
+;; enh-ruby-mode
+(autoload 'enh-ruby-mode "enh-ruby-mode"
+  "Mode for editing ruby source files" t)
+(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Capfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
+;; "encoding を自動挿入しない"
+(defun remove-enh-magic-comment ()
+  (remove-hook 'before-save-hook 'enh-ruby-mode-set-encoding t))
+(add-hook 'enh-ruby-mode-hook 'remove-enh-magic-comment)
+(setq ruby-insert-encoding-magic-comment nil)
+(add-hook 'enh-ruby-mode-hook
+  '(lambda ()
+    (setq ruby-indent-level tab-width)
+    (setq enh-ruby-deep-indent-paren nil)
+    (define-key ruby-mode-map [return] 'ruby-reindent-then-newline-and-indent))
+    (load-auto-complete)
+    (setenv "LC_ALL" "ja_JP.UTF-8"))
+
+;; ruby-electric
+(require 'ruby-electric)
+(add-hook 'enh-ruby-mode-hook '(lambda () (ruby-electric-mode t)))
+(setq ruby-electric-expand-delimiters-list nil)
+
+;; ruby-block
+(require 'ruby-block)
+(ruby-block-mode t)
+(setq ruby-block-highlight-toggle t)
+
+;; rubocop
+(require 'rubocop)
+(add-hook 'enh-ruby-mode-hook 'rubocop-mode)
+
+;; flycheck
+(require 'flycheck)
+(setq flycheck-check-syntax-automatically '(mode-enabled save))
+(add-hook 'enh-ruby-mode-hook 'flycheck-mode)
+(add-hook 'go-mode-hook 'flycheck-mode)
+
+;; haml-mode
+(require 'haml-mode)
+(add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
+(add-hook 'haml-mode-hook
+  (lambda ()
+    (define-key haml-mode-map "\C-m" 'newline-and-indent)))
+
+;; Projectile Rails
+(require 'projectile)
+(projectile-global-mode)
+(require 'projectile-rails)
+(add-hook 'projectile-mode-hook 'projectile-rails-on)
+
+
+;; coffee-mode
+(require 'coffee-mode)
+(defun coffee-custom ()
+  "coffee-mode-hook"
+  (and (set (make-local-variable 'tab-width) 2)
+       (set (make-local-variable 'coffee-tab-width) 2)
+       (turn-off-auto-fill))
+  )
+
+(add-hook 'coffee-mode-hook
+  '(lambda() (coffee-custom)))
+
+;; ctags
+(require 'ctags)
+(global-set-key (kbd "M-.") 'ctags-search)
+
+(require 'ctags-update)
+(autoload 'ctags-update "ctags-update" "update TAGS using ctags" t)
+
+;; customize
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(js2-basic-offset 2)
+ '(markdown-command "/usr/local/bin/pandoc")
+ )
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+;; git-gutter-fringe+
+(require 'git-gutter-fringe+)
+(global-git-gutter+-mode t)
+
+;; ag
+(setq ag-highlight-search t)  ; 検索キーワードをハイライト
+(setq ag-reuse-buffers t)     ; 検索用バッファを使い回す (検索ごとに新バッファを作らない)
+
+;; rails-log-mode
+(require 'rails-log-mode)

@@ -148,7 +148,8 @@ $ go get -u github.com/nsf/gocode
 * godef をインストール
 
 ```
-$ go get code.google.com/p/rog-go/exp/cmd/godef
+~~$ go get code.google.com/p/rog-go/exp/cmd/godef~~
+$ go get github.com/rogpeppe/godef
 ```
 
 * 設定を追加
