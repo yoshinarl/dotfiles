@@ -133,3 +133,6 @@ export PATH=$PATH:~/.aws/eb/macosx/python2.7/
 # シェル立ち上げ時に稼働時間を出力するようにする
 uptime
 source /usr/local/bin/aws_zsh_completer.sh
+
+# pip --user PATH
+export PATH=$PATH:~/Library/Python/2.7/bin
