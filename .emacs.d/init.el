@@ -229,3 +229,12 @@
 
 (global-set-key (kbd "M-P") 'move-line-up)
 (global-set-key (kbd "M-N") 'move-line-down)
+
+;;  --------------
+;; |    el-get    |
+;;  --------------
+
+;; 行番号を表示
+(el-get-bundle linum-ex
+  (global-linum-mode t)
+  (setq linum-format "%5d"))
