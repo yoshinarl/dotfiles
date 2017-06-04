@@ -3,23 +3,9 @@
 ;;  ---------------
 
 ;; ロードパス
-(add-to-list 'load-path "~/.emacs.d/elpa/")
-(add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
 ;; homebrwe でインストールしたツールを使う
 (add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
-
-;; auto-install
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-install/"))
-(add-to-list 'load-path "~/.emacs.d/auto-install/")
-(require 'auto-install)
-;(auto-install-update-emacswiki-package-name t)
-(setq auto-install-directory "~/.emacs.d/auto-install/")
-(auto-install-compatibility-setup)
-
-;; anything
-(require 'anything-startup)
-(define-key global-map (kbd "C-x C-a") 'anything)
 
 ;; 対応する括弧を光らせる
 (show-paren-mode 1)
@@ -33,10 +19,10 @@
 ;; 保存時に行末の空白を削除
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;;;;;; optionキーをMetaキーとして利用
+;; optionキーをMetaキーとして利用
 (setq mac-option-modifier 'meta)
 
-;;;;;; Returnでオートインデント
+;; Returnでオートインデント
 (global-set-key "\C-m" 'newline-and-indent)
 
 ;; C-hをBSに
@@ -68,13 +54,6 @@
 ;; 選択範囲をハイライト表示
 (transient-mark-mode t)
 
-;; パッケージ管理を利用
-(require 'package)
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(package-initialize)
-
 ;; タブ幅を4に設定。タブを使わずスペースにする
 (setq-default tab-width 4 indent-tabs-mode nil)
 ;; タブ幅の倍数を設定
@@ -103,12 +82,6 @@
 (global-set-key (kbd "\'") 'skeleton-pair-insert-maybe)
 (setq skeleton-pair 1)
 
-
-;; C−x C-f C-rで開くファイルを履歴からインクリメンタルサーチする。
-(require 'minibuf-isearch)
-(require 'session)
-(add-hook 'after-init-hook 'session-initialize)
-
 ;; フォント変更->Ricty
 (let* ((size 13)
            (asciifont "Ricty") ; ASCII fonts
@@ -127,7 +100,7 @@
 (setq truncate-partial-width-windows nil)
 
 ;; フレームの3分割
-;;  C-xで縦3分割。C-x#で横3分割
+;;  C-x@で縦3分割。C-x#で横3分割
 (defun split-window-vertically-n (num_wins)
   (interactive "p")
   (if (= num_wins 2)
@@ -244,196 +217,3 @@
 
 (global-set-key (kbd "M-P") 'move-line-up)
 (global-set-key (kbd "M-N") 'move-line-down)
-
-;;  -------------------
-;; |   各モード設定    |
-;;  -------------------
-
-;; 行番号を表示
-(require 'linum)
-(global-linum-mode t)
-(setq linum-format "%5d")
-
-;; auto-complete-mode
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
-(add-to-list 'ac-modes 'text-mode)
-
-;; Emmet
-(require 'emmet-mode)
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; マークアップ言語全部で使う
-(add-hook 'css-mode-hook  'emmet-mode) ;; CSSにも使う
-;(add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 4))) ;; indent はスペース4個
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; マークアップモードで自動的に emmet-mode をたちあげる
-;(add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 4))) ;; indent 4 spaces
-(add-hook 'web-mode-hook 'emmet-mode) ;; web-mode で自動的に emmet-mode を立ち上げる
-(add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 4))) ;; indent 4 spaces
-(setq emmet-move-cursor-between-quotes t) ;; 最初のクオートの中にカーソルをぶちこむ
-(eval-after-load "emmet-mode"
-  '(define-key emmet-mode-keymap (kbd "C-j") nil)) ;; C-j は newline のままにしておく
-(keyboard-translate ?\C-i ?\H-i) ;;C-i と Tabの被りを回避
-(define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line) ;; C-i で展開
-
-
-;; markdown-mode
-(autoload 'markdown-mode "markdown-mode"
-"Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(custom-set-variables '(markdown-command "/usr/local/bin/pandoc"))
-(add-hook 'markdown-mode-hook
-          '(lambda ()
-             (electric-indent-local-mode -1)))
-
-;; web-mode
-(require 'web-mode)
-;; 拡張子の設定
-(add-to-list 'auto-mode-alist '("\\.phtml$"     . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jsp$"       . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x$"   . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb$"       . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?$"     . web-mode))
-;; インデント関係
-(defun web-mode-hook ()
-;;  "Hooks for Web mode."
-  (setq web-mode-html-offset   4)
-  (setq web-mode-css-offset    4)
-  (setq web-mode-script-offset 4)
-  (setq web-mode-php-offset    4)
-  (setq web-mode-java-offset   4)
-  (setq web-mode-asp-offset    4)
-  (setq web-mode-code-offset   4)
-  (setq indent-tabs-mode nil)
-  (setq tab-width 4))
-(add-hook 'web-mode-hook 'web-mode-hook)
-(add-hook 'emmet-mode-hook 'web-mode-hock)
-
-;; python 用インデント設定
-(add-hook 'python-mode-hook
-    '(lambda ()
-;;        (setq indent-line-function 'tab-to-tab-stop)
-        (setq python-indent 4)
-        (setq indent-level 4)
-        (setq indent-tabs-mode nil)
-    ))
-
-;; go-lang 用
-(add-to-list 'exec-path (expand-file-name "~/.go/bin"))
-;; auto-complete
-(add-to-list 'load-path "~/.go/src/github.com/nsf/gocode/emacs/")
-(require 'go-autocomplete)
-;; go-flymake
-(add-to-list 'load-path "~/.go/src/github.com/dougm/goflymake")
-(require 'go-flymake)
-;; M-. で godef
-(add-hook 'go-mode-hook (lambda () (local-set-key (kbd "M-.") 'godef-jump)))
-;; インデントをスペースに
-(add-hook 'go-mode-hook
-    '(lambda ()
-        (setq indent-tabs-mode 1)
-        (setq tab-width 2)
-        (setq whitespace-style '(face   ; faceで可視化
-                         trailing       ; 行末
-                         tabs           ; タブ
-                         empty          ; 先頭/末尾の空行
-                         space-mark     ; 表示のマッピング
-                         ))
-     ))
-
-;; js2-mode
-(autoload 'js2-mode "js2-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
-;; flycheck
-(add-hook 'after-init-hook #'global-flycheck-mode)
-
-;; jade-mode
-(require 'jade-mode)
-(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
-
-;; scss-mode
-(require 'scss-mode)
-(add-to-list 'auto-mode-alist '("\\.scss$" . scss-mode))
-
-;; インデント幅を2にする
-;; コンパイルは compass watchで行うので自動コンパイルをオフ
-(defun scss-custom ()
-  "scss-mode-hook"
-  (and
-   (set (make-local-variable 'css-indent-offset) 2)
-   (set (make-local-variable 'scss-compile-at-save) nil)
-   )
-  )
-(add-hook 'scss-mode-hook
-  '(lambda() (scss-custom)))
-
-;; whitespace
-;; 空白関係を可視化させる
-(require 'whitespace)
-(setq whitespace-style '(face           ; faceで可視化
-                         trailing       ; 行末
-                         tabs           ; タブ
-                         empty          ; 先頭/末尾の空行
-                         space-mark     ; 表示のマッピング
-                         tab-mark
-                         ))
-
-(setq whitespace-display-mappings
-      '((tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
-
-(global-whitespace-mode 1)
-
-(defvar my/bg-color "#333333")
-(set-face-attribute 'whitespace-trailing nil
-                    :background my/bg-color
-                    :foreground "DeepPink"
-                    :underline t)
-(set-face-attribute 'whitespace-tab nil
-                    :background my/bg-color
-                    :foreground "LightSkyBlue"
-                    :underline t)
-(set-face-attribute 'whitespace-space nil
-                    :background my/bg-color
-                    :foreground "GreenYellow"
-                    :weight 'bold)
-(set-face-attribute 'whitespace-empty nil
-                    :background my/bg-color)
-
-;; elixir-mode
-(require 'elixir-mode)
-(require 'alchemist)
-(add-hook 'elixir-mode-hook 'ac-alchemist-setup)
-
-;; csv-mode
-(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
-(autoload 'csv-mode "csv-mode"
-  "Major mode for editing comma-separated value files." t)
-
-;; ruby-mode
-;;(autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
-;;(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
-;;(add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
-;;(add-hook 'enh-ruby-mode-hock (lambda () (setq emmet-indentation 2)))
-(autoload 'enh-ruby-mode "enh-ruby-mode"
-  "Mode for editing ruby source files" t)
-(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("Capfile$" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
-;; "encoding を自動挿入しない"
-(defun remove-enh-magic-comment ()
-  (remove-hook 'before-save-hook 'enh-ruby-mode-set-encoding t))
-(add-hook 'enh-ruby-mode-hook 'remove-enh-magic-comment)
-(setq ruby-insert-encoding-magic-comment nil)
-(add-hook 'enh-ruby-mode-hook
-  '(lambda ()
-    (setq ruby-indent-level tab-width)
-    (setq enh-ruby-deep-indent-paren nil)
-    (define-key ruby-mode-map [return] 'ruby-reindent-then-newline-and-indent))
-    (setenv "LC_ALL" "ja_JP.UTF-8"))
-
-
-;; haml-mode
-(require 'haml-mode)
-(add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
