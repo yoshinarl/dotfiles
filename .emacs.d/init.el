@@ -238,3 +238,11 @@
 (el-get-bundle linum-ex
   (global-linum-mode t)
   (setq linum-format "%5d"))
+
+;; auto-complete-mode
+(el-get-bundle auto-complete)
+(ac-config-default)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(add-to-list 'ac-modes 'fundamental-mode)
+(setq ac-use-menu-map t)
+(setq ac-use-fuzzy t)
