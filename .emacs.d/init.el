@@ -246,3 +246,7 @@
 (add-to-list 'ac-modes 'fundamental-mode)
 (setq ac-use-menu-map t)
 (setq ac-use-fuzzy t)
+
+;; flycheck
+(el-get-bundle flycheck)
+(add-hook 'after-init-hook #'global-flycheck-mode)
