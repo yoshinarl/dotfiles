@@ -282,3 +282,8 @@
 ;; flycheck
 (el-get-bundle flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; anything
+(el-get-bundle anything)
+(require 'anything-startup)
+(define-key global-map (kbd "C-x C-a") 'anything)
