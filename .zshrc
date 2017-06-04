@@ -68,7 +68,7 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 fi
 
 # golang
-export GOROOT=/usr/local/opt/go/libexec
+export GOROOT=/usr/local/go/bin
 export GOPATH=$HOME/.go
 export PATH=$PATH:$GOPATH/bin
 
