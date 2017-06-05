@@ -359,6 +359,11 @@
 ;; |    package    |
 ;;  ---------------
 
+;; C−x C-f C-rで開くファイルを履歴からインクリメンタルサーチする。
+(require 'minibuf-isearch)
+(require 'session)
+(add-hook 'after-init-hook 'session-initialize)
+
 ;; git-gutter-fringe+
 (require 'git-gutter-fringe+)
 (global-git-gutter+-mode t)
