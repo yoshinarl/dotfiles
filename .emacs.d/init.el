@@ -354,3 +354,11 @@
 (el-get-bundle ag)
 (setq ag-highlight-search t)
 (setq ag-reuse-buffers t)
+
+;;  ---------------
+;; |    package    |
+;;  ---------------
+
+;; git-gutter-fringe+
+(require 'git-gutter-fringe+)
+(global-git-gutter+-mode t)
