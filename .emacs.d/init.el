@@ -349,3 +349,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; ag
+(el-get-bundle ag)
+(setq ag-highlight-search t)
+(setq ag-reuse-buffers t)
