@@ -272,18 +272,55 @@
   (setq linum-format "%5d"))
 
 ;; auto-complete-mode
-(el-get-bundle auto-complete)
-(ac-config-default)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(add-to-list 'ac-modes 'fundamental-mode)
-(setq ac-use-menu-map t)
-(setq ac-use-fuzzy t)
+(defun load-auto-complete ()
+  (el-get-bundle auto-complete)
+  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+  (ac-config-default)
+  (add-to-list 'ac-modes 'text-mode)
+  (add-to-list 'ac-modes 'enh-ruby-mode)
+  (setq ac-use-menu-map t)
+  (setq ac-use-fuzzy t))
 
 ;; flycheck
 (el-get-bundle flycheck)
+(setq flycheck-check-syntax-automatically '(mode-enabled save))
 (add-hook 'after-init-hook #'global-flycheck-mode)
+(add-hook 'enh-ruby-mode-hook 'flycheck-mode)
 
 ;; anything
 (el-get-bundle anything)
 (require 'anything-startup)
 (define-key global-map (kbd "C-x C-a") 'anything)
+
+;; enh-ruby-mode
+(el-get-bundle enh-ruby-mode)
+(autoload 'enh-ruby-mode "enh-ruby-mode"
+  "Mode for editing ruby source files" t)
+(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Capfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
+;; "encoding を自動挿入しない"
+(defun remove-enh-magic-comment ()
+  (remove-hook 'before-save-hook 'enh-ruby-mode-set-encoding t))
+(add-hook 'enh-ruby-mode-hook 'remove-enh-magic-comment)
+(setq ruby-insert-encoding-magic-comment nil)
+(add-hook 'enh-ruby-mode-hook
+  '(lambda ()
+    (setq ruby-indent-level tab-width)
+    (setq enh-ruby-deep-indent-paren nil)
+    (define-key ruby-mode-map [return] 'ruby-reindent-then-newline-and-indent))
+    (load-auto-complete)
+    (setenv "LC_ALL" "ja_JP.UTF-8"))
+
+;; ruby-electric
+(el-get-bundle ruby-electric)
+(add-hook 'enh-ruby-mode-hook '(lambda () (ruby-electric-mode t)))
+(setq ruby-electric-expand-delimiters-list nil)
+
+;; ruby-block
+(el-get-bundle ruby-block)
+(setq ruby-block-highlight-toggle t)
+
+;; rubocop
+(el-get-bundle rubocop)
+(add-hook 'enh-ruby-mode-hook 'rubocop-mode)
