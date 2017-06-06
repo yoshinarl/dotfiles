@@ -3,6 +3,7 @@
 ;;  ---------------
 
 ;; ロードパス
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
@@ -10,7 +11,22 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+;; 環境変数パス
+(dolist (dir (list
+              "/sbin"
+              "/usr/sbin"
+              "/bin"
+              "/usr/bin"
+              "/usr/local/bin"
+              (expand-file-name "~/bin")
+              (expand-file-name "~/.emacs.d/bin")
+              ))
+ (when (and (file-exists-p dir) (not (member dir exec-path)))
+   (setenv "PATH" (concat dir ":" (getenv "PATH")))
+   (setq exec-path (append (list dir) exec-path))))
+
+;; homebrwe でインストールしたツールを使う
+(add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
 
 ;; el-get
 (unless (require 'el-get nil 'noerror)
@@ -73,10 +89,11 @@
 ;; 選択範囲をハイライト表示
 (transient-mark-mode t)
 
-;; タブ幅を4に設定。タブを使わずスペースにする
-(setq-default tab-width 4 indent-tabs-mode nil)
+;; タブ幅を2に設定。タブを使わずスペースにする
+(setq-default tab-width 2 indent-tabs-mode nil)
+
 ;; タブ幅の倍数を設定
-(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
+(setq tab-stop-list '(2 4 6 8 10 12 14 16 18 20))
 
 ;; 起動時のサイズ、表示位置、フォントを設定
 (setq initial-frame-alist
@@ -237,6 +254,13 @@
 (global-set-key (kbd "M-P") 'move-line-up)
 (global-set-key (kbd "M-N") 'move-line-down)
 
+;; C-z を無効化
+(global-unset-key "\C-z")
+
+;; タイトルバーにファイルのフルパス表示
+(setq frame-title-format
+      (format "%%b - %%f"))
+
 ;; whitespace
 ;; 空白関係を可視化させる
 (require 'whitespace)
@@ -260,7 +284,7 @@
                     :underline t)
 (set-face-attribute 'whitespace-tab nil
                     :background my/bg-color
-                    :foreground "LightSkyBlue"
+                    :foreground "gray36"
                     :underline t)
 (set-face-attribute 'whitespace-space nil
                     :background my/bg-color

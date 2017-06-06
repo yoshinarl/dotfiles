@@ -1,6 +1,9 @@
 autoload -U compinit
 compinit
 
+autoload -U select-word-style
+select-word-style bash
+
 export LANG=ja_JP.UTF-8
 
 HISTFILE=~/.zsh_history
@@ -73,6 +76,7 @@ export GOPATH=$HOME/.go
 export PATH=$PATH:$GOPATH/bin
 
 # rbenv
+export PATH="${HOME}/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
 # git color
@@ -121,3 +125,7 @@ alias gst='git status -s -b'
 alias giff='git diff'
 
 export PATH=~/Library/Python/2.7/bin:$PATH
+
+# シェル立ち上げ時に稼働時間を出力するようにする
+uptime
+source /usr/local/bin/aws_zsh_completer.sh
