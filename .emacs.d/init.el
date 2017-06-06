@@ -403,3 +403,9 @@
 ;; git-gutter-fringe+
 (require 'git-gutter-fringe+)
 (global-git-gutter+-mode t)
+
+;; hiwin-mode
+;; 非アクティブのバッファの色を変える
+(require 'hiwin)
+(hiwin-activate)
+(set-face-background 'hiwin-face "#666666")
