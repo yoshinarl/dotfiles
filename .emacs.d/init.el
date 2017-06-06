@@ -5,6 +5,12 @@
 ;; ロードパス
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 ;; 環境変数パス
 (dolist (dir (list
               "/sbin"
@@ -21,12 +27,6 @@
 
 ;; homebrwe でインストールしたツールを使う
 (add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
 
 ;; el-get
 (unless (require 'el-get nil 'noerror)
@@ -89,11 +89,11 @@
 ;; 選択範囲をハイライト表示
 (transient-mark-mode t)
 
-;; タブ幅を4に設定。タブを使わずスペースにする
-;;(setq-default tab-width 4 indent-tabs-mode nil)
+;; タブ幅を2に設定。タブを使わずスペースにする
+(setq-default tab-width 2 indent-tabs-mode nil)
+
 ;; タブ幅の倍数を設定
 (setq tab-stop-list '(2 4 6 8 10 12 14 16 18 20))
-(setq-default tab-width 2 indent-tabs-mode nil)
 
 ;; 起動時のサイズ、表示位置、フォントを設定
 (setq initial-frame-alist
@@ -403,3 +403,9 @@
 ;; git-gutter-fringe+
 (require 'git-gutter-fringe+)
 (global-git-gutter+-mode t)
+
+;; hiwin-mode
+;; 非アクティブのバッファの色を変える
+(require 'hiwin)
+(hiwin-activate)
+(set-face-background 'hiwin-face "#666666")

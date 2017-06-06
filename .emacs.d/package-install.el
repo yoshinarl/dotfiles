@@ -8,6 +8,7 @@
 
 (defvar my/favorite-packages
   '(
+    hiwin
     minibuf-isearch session
     git-gutter-
     ))
