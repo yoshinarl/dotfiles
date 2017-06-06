@@ -45,8 +45,11 @@ zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'c
 
 # alias
 alias ls="ls -G"
-alias ll="ls -l"
+alias ll="ls -lG"
 alias rm="rmtrash"
+alias iossim="/Applications/Xcode.app/Contents/Developer/Applications/iOS\ Simulator.app"
+alias subl="/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
+
 export JAVA_HOME='/Library/Java/JavaVirtualMachines/jdk1.8.0_31.jdk/Contents/Home'
 export JAVA_OPTS='-DFile.encoding=UTF-8'
 
@@ -68,7 +71,7 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 fi
 
 # golang
-export GOROOT=/usr/local/opt/go/libexec
+export GOROOT=/usr/local/go/bin
 export GOPATH=$HOME/.go
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
@@ -76,44 +79,46 @@ export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 #function git(){hub "$@"}
 eval "$(direnv hook zsh)"
 
+export PATH=$PATH:$GOPATH/bin
+
 # rbenv
 export PATH="${HOME}/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
-# git status
+# git color
 autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
 
 function rprompt-git-current-branch {
-        local name st color gitdir action
-        if [[ "$PWD" =~ '/\.git(/.*)?$' ]]; then
-                return
-        fi
+    local name st color gitdir action
+    if [[ "$PWD" =~ '/\.git(/.*)?$' ]]; then
+        return
+    fi
 
-        name=`git rev-parse --abbrev-ref=loose HEAD 2> /dev/null`
-        if [[ -z $name ]]; then
-                return
-        fi
+    name=`git rev-parse --abbrev-ref=loose HEAD 2> /dev/null`
+    if [[ -z $name ]]; then
+        return
+    fi
 
-        gitdir=`git rev-parse --git-dir 2> /dev/null`
-        action=`VCS_INFO_git_getaction "$gitdir"` && action="($action)"
+    gitdir=`git rev-parse --git-dir 2> /dev/null`
+    action=`VCS_INFO_git_getaction "$gitdir"` && action="($action)"
 
-	if [[ -e "$gitdir/rprompt-nostatus" ]]; then
-		echo "$name$action "
-		return
-	fi
+    if [[ -e "$gitdir/rprompt-nostatus" ]]; then
+        echo "$name$action "
+        return
+    fi
 
-        st=`git status 2> /dev/null`
-	if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
-		color=%F{green}
-	elif [[ -n `echo "$st" | grep "^nothing added"` ]]; then
-		color=%F{yellow}
-	elif [[ -n `echo "$st" | grep "^# Untracked"` ]]; then
-                color=%B%F{red}
-        else
-                color=%F{red}
-        fi
+    st=`git status 2> /dev/null`
+    if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
+        color=%F{green}
+    elif [[ -n `echo "$st" | grep "^nothing added"` ]]; then
+        color=%F{yellow}
+    elif [[ -n `echo "$st" | grep "^# Untracked"` ]]; then
+        color=%B%F{red}
+    else
+        color=%F{red}
+    fi
 
-        echo "$color$name$action%f%b "
+    echo "$color$name$action%f%b "
 }
 
 # プロンプトが表示されるたびにプロンプト文字列を評価、置換する
@@ -121,11 +126,9 @@ setopt prompt_subst
 
 RPROMPT='[`rprompt-git-current-branch`%~]'
 
-
 # git alias
 alias gst="git status -s -b"
 alias giff="git diff"
-
 
 # aws PATH
 export PATH=$PATH:~/.aws/eb/macosx/python2.7/
