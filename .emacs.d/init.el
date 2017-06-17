@@ -3,7 +3,6 @@
 ;;  ---------------
 
 ;; ロードパス
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
@@ -27,17 +26,6 @@
 
 ;; homebrwe でインストールしたツールを使う
 (add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
-
-;; el-get
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
-(el-get 'sync)
 
 ;; homebrwe でインストールしたツールを使う
 (add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
@@ -293,18 +281,18 @@
 (set-face-attribute 'whitespace-empty nil
                     :background my/bg-color)
 
-;;  --------------
-;; |    el-get    |
-;;  --------------
+;;  ---------------
+;; |    package    |
+;;  ---------------
 
 ;; 行番号を表示
-(el-get-bundle linum-ex
-  (global-linum-mode t)
-  (setq linum-format "%5d"))
+(require 'linum)
+(global-linum-mode t)
+(setq linum-format "%5d")
 
 ;; auto-complete-mode
 (defun load-auto-complete ()
-  (el-get-bundle auto-complete)
+  (require 'auto-complete)
   (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
   (ac-config-default)
   (add-to-list 'ac-modes 'text-mode)
@@ -313,18 +301,18 @@
   (setq ac-use-fuzzy t))
 
 ;; flycheck
-(el-get-bundle flycheck)
+(require 'flycheck)
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (add-hook 'enh-ruby-mode-hook 'flycheck-mode)
 
 ;; anything
-(el-get-bundle anything)
+(require 'anything)
 (require 'anything-startup)
 (define-key global-map (kbd "C-x C-a") 'anything)
 
 ;; enh-ruby-mode
-(el-get-bundle enh-ruby-mode)
+(require 'enh-ruby-mode)
 (autoload 'enh-ruby-mode "enh-ruby-mode"
   "Mode for editing ruby source files" t)
 (add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
@@ -344,22 +332,22 @@
     (setenv "LC_ALL" "ja_JP.UTF-8"))
 
 ;; ruby-electric
-(el-get-bundle ruby-electric)
+(require 'ruby-electric)
 (add-hook 'enh-ruby-mode-hook '(lambda () (ruby-electric-mode t)))
 (setq ruby-electric-expand-delimiters-list nil)
 
 ;; ruby-block
-(el-get-bundle ruby-block)
+(require 'ruby-block)
 (setq ruby-block-highlight-toggle t)
 
 ;; rubocop
-(el-get-bundle rubocop)
+(require 'rubocop)
 (add-hook 'enh-ruby-mode-hook 'rubocop-mode)
 
 ;; Projectile Rails
-(el-get-bundle projectile)
+(require 'projectile)
 (projectile-global-mode)
-(el-get-bundle projectile-rails)
+(require 'projectile-rails)
 (add-hook 'projectile-mode-hook 'projectile-rails-on)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -375,25 +363,21 @@
  )
 
 ;; ag
-(el-get-bundle ag)
+(require 'ag)
 (setq ag-highlight-search t)
 (setq ag-reuse-buffers t)
 
 ;; js2-mode
-(el-get-bundle js2-mode)
+(require 'js2-mode)
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
 ;; haml-mode
-(el-get-bundle haml-mode)
+(require 'haml-mode)
 (add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
 (add-hook 'haml-mode-hook
   (lambda ()
     (define-key haml-mode-map "\C-m" 'newline-and-indent)))
-
-;;  ---------------
-;; |    package    |
-;;  ---------------
 
 ;; C−x C-f C-rで開くファイルを履歴からインクリメンタルサーチする。
 (require 'minibuf-isearch)
