@@ -8,9 +8,22 @@
 
 (defvar my/favorite-packages
   '(
+    linum
+    auto-complete
+    flycheck
+    anything
+    enh-ruby-mode
+    ruby-electric
+    ruby-block
+    rubocop
+    projectile
+    projectile-rails
+    ag
+    js2-mode
+    haml-mode
     hiwin
     minibuf-isearch session
-    git-gutter-
+    git-gutter-fringe+
     ))
 
 ;; my/favorite-packagesからインストールしていないパッケージをインストール
