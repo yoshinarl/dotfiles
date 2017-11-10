@@ -12,6 +12,7 @@
     auto-complete
     flycheck
     anything
+    rbenv
     enh-ruby-mode
     ruby-electric
     ruby-block

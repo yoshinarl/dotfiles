@@ -10,6 +10,22 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (haml-mode js2-mode ag projectile-rails projectile rubocop ruby-block ruby-electric enh-ruby-mode anything flycheck auto-complete inflections)))
+ '(session-use-package t nil (session)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
 ;; 環境変数パス
 (dolist (dir (list
               "/sbin"
@@ -311,13 +327,19 @@
 (require 'anything-startup)
 (define-key global-map (kbd "C-x C-a") 'anything)
 
+;; rbenv-mode
+(require 'rbenv)
+(global-rbenv-mode)
+(setq rbenv-installation-dir "/usr/local/Cellar/rbenv")
+
 ;; enh-ruby-mode
 (require 'enh-ruby-mode)
 (autoload 'enh-ruby-mode "enh-ruby-mode"
   "Mode for editing ruby source files" t)
-(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("Capfile$" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist
+             '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
+(add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
+
 ;; "encoding を自動挿入しない"
 (defun remove-enh-magic-comment ()
   (remove-hook 'before-save-hook 'enh-ruby-mode-set-encoding t))
@@ -349,18 +371,6 @@
 (projectile-global-mode)
 (require 'projectile-rails)
 (add-hook 'projectile-mode-hook 'projectile-rails-on)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (inflections))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;; ag
 (require 'ag)
