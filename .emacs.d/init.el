@@ -40,10 +40,7 @@
    (setenv "PATH" (concat dir ":" (getenv "PATH")))
    (setq exec-path (append (list dir) exec-path))))
 
-;; homebrwe でインストールしたツールを使う
-(add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
-
-;; homebrwe でインストールしたツールを使う
+;; homebrew でインストールしたツールを使う
 (add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
 
 ;; 対応する括弧を光らせる
