@@ -25,6 +25,7 @@
     hiwin
     minibuf-isearch session
     git-gutter-fringe+
+    emmet-mode
     ))
 
 ;; my/favorite-packagesからインストールしていないパッケージをインストール
