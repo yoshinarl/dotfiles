@@ -26,6 +26,7 @@
     minibuf-isearch session
     git-gutter-fringe+
     emmet-mode
+    elscreen
     ))
 
 ;; my/favorite-packagesからインストールしていないパッケージをインストール
