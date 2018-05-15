@@ -27,6 +27,7 @@
     git-gutter-fringe+
     emmet-mode
     elscreen
+    web-mode
     ))
 
 ;; my/favorite-packagesからインストールしていないパッケージをインストール
