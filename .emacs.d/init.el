@@ -428,7 +428,6 @@ With argument, do this that many times."
 (add-hook 'emmet-mode-hook (lambda () (setq emmet-indent-after-insert nil)))
 (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2))) ;; indent 2 spaces.
 (setq emmet-move-cursor-between-quotes t) ;; default nil
-(add-to-list 'auto-mode-alist '("\\.erb?\\'" . emmet-mode))
 
 ;; elscreen
 (require 'elscreen)
@@ -464,3 +463,4 @@ With argument, do this that many times."
 ;; web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-hook 'web-mode-hook 'emmet-mode)
