@@ -47,39 +47,10 @@ zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'c
 alias ls="ls -G"
 alias ll="ls -lG"
 alias rm="rmtrash"
-alias iossim="/Applications/Xcode.app/Contents/Developer/Applications/iOS\ Simulator.app"
-alias subl="/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text"
-
-export JAVA_HOME='/Library/Java/JavaVirtualMachines/jdk1.8.0_31.jdk/Contents/Home'
-export JAVA_OPTS='-DFile.encoding=UTF-8'
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# pyenv PATH Setting
-export PYENV_ROOT="${HOME}/.pyenv"
-if [ -d "${PYENV_ROOT}" ]; then
-    export PATH=${PYENV_ROOT}/bin:$PATH
-    eval "$(pyenv init -)"
-fi
 export PATH=/usr/local/bin:$PATH
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-
-# virtualenvwrapper PATH Setting
-if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-    export WORKON_HOME=$HOME/.virtualenvs
-    source /usr/local/bin/virtualenvwrapper.sh
-fi
-
-# golang
-export GOROOT=/usr/local/go/bin
-export GOPATH=$HOME/.go
-export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
-
-# hub setting
-#function git(){hub "$@"}
-eval "$(direnv hook zsh)"
-
-export PATH=$PATH:$GOPATH/bin
 
 # rbenv
 export PATH="${HOME}/.rbenv/bin:$PATH"
@@ -130,12 +101,5 @@ RPROMPT='[`rprompt-git-current-branch`]'
 alias gst="git status -s -b"
 alias giff="git diff"
 
-# aws PATH
-export PATH=$PATH:~/.aws/eb/macosx/python2.7/
-
 # シェル立ち上げ時に稼働時間を出力するようにする
 uptime
-source /usr/local/bin/aws_zsh_completer.sh
-
-# pip --user PATH
-export PATH=$PATH:~/Library/Python/2.7/bin
