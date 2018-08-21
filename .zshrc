@@ -62,7 +62,7 @@ if [ -d "${PYENV_ROOT}" ]; then
     eval "$(pyenv init -)"
 fi
 export PATH=/usr/local/bin:$PATH
-export PATH=$PATH:/Users/yoshinari/.nodebrew/current/bin
+export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # virtualenvwrapper PATH Setting
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
