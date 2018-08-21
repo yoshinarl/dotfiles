@@ -118,13 +118,13 @@ function rprompt-git-current-branch {
         color=%F{red}
     fi
 
-    echo "$color$name$action%f%b "
+    echo "$color$name$action%f%b"
 }
 
 # プロンプトが表示されるたびにプロンプト文字列を評価、置換する
 setopt prompt_subst
 
-RPROMPT='[`rprompt-git-current-branch`%~]'
+RPROMPT='[`rprompt-git-current-branch`]'
 
 # git alias
 alias gst="git status -s -b"
