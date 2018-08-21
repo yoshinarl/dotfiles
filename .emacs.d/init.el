@@ -3,6 +3,7 @@
 ;;  ---------------
 
 ;; ロードパス
+(setq load-path (cons "~/.emacs.d/elisp" load-path))
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
@@ -17,7 +18,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (web-mode ac-emmet emmet-mode emmet haml-mode js2-mode ag projectile-rails projectile rubocop ruby-block ruby-electric enh-ruby-mode anything flycheck auto-complete inflections)))
+    (rufo web-mode ac-emmet emmet-mode emmet haml-mode js2-mode ag projectile-rails projectile rubocop ruby-block ruby-electric enh-ruby-mode anything flycheck auto-complete inflections)))
  '(session-use-package t nil (session)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -332,7 +333,13 @@ With argument, do this that many times."
 (require 'flycheck)
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
 (add-hook 'after-init-hook #'global-flycheck-mode)
-(add-hook 'enh-ruby-mode-hook 'flycheck-mode)
+;; rufo 使うので無効化
+;; (add-hook 'enh-ruby-mode-hook 'flycheck-mode)
+;; jshint を優先して見るので無効化
+(eval-after-load 'flycheck
+  '(custom-set-variables
+    '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))))
+
 
 ;; anything
 (require 'anything)
@@ -376,8 +383,8 @@ With argument, do this that many times."
 (setq ruby-block-highlight-toggle t)
 
 ;; rubocop
-(require 'rubocop)
-(add-hook 'enh-ruby-mode-hook 'rubocop-mode)
+;; (require 'rubocop)
+;; (add-hook 'enh-ruby-mode-hook 'rubocop-mode)
 
 ;; Projectile Rails
 (require 'projectile)
@@ -465,3 +472,8 @@ With argument, do this that many times."
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (setq web-mode-markup-indent-offset 2)
 (add-hook 'web-mode-hook 'emmet-mode)
+
+;; rufo.el
+(require 'rufo)
+(add-hook 'enh-ruby-mode-hook 'rufo-minor-mode)
+(setq rufo-minor-mode-use-bundler t)
