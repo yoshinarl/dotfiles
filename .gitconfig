@@ -4,7 +4,6 @@
 [core]
     excludesfile =
     edirot = "vim"
-
 [alias]
     st = status
     co = checkout
@@ -12,3 +11,5 @@
 [filter "media"]
     clean = git-media-clean %f
     smudge = git-media-smudge %f
+[push]
+    default = current
