@@ -175,9 +175,6 @@
       ;;(count-lines-region (region-beginning) (region-end)) ;; これだとエコーエリアがチラつく
     ""))
 
-(add-to-list 'default-mode-line-format
-             '(:eval (count-lines-and-chars)))
-
 ;; スクロールを加速させない
 (global-set-key [wheel-up] '(lambda () "" (interactive) (scroll-down 1)))
 (global-set-key [wheel-down] '(lambda () "" (interactive) (scroll-up 1)))
