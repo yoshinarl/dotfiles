@@ -52,8 +52,10 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 export PATH=/usr/local/bin:$PATH
 
+# nodenv
+eval "$(nodenv init -)"
+
 # rbenv
-export PATH="${HOME}/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
 # git color
