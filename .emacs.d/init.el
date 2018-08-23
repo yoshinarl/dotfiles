@@ -19,7 +19,7 @@
  '(flycheck-disabled-checkers (quote (javascript-jshint javascript-jscs)))
  '(package-selected-packages
    (quote
-    (rufo web-mode ac-emmet emmet-mode emmet haml-mode js2-mode ag projectile-rails projectile rubocop ruby-block ruby-electric enh-ruby-mode anything flycheck auto-complete inflections)))
+    (rufo web-mode ac-emmet emmet-mode emmet haml-mode js2-mode ag projectile-rails projectile rubocop ruby-block ruby-electric enh-ruby-mode flycheck auto-complete inflections)))
  '(session-use-package t nil (session)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -341,11 +341,10 @@ With argument, do this that many times."
   '(custom-set-variables
     '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))))
 
-
-;; anything
-(require 'anything)
-(require 'anything-startup)
-(define-key global-map (kbd "C-x C-a") 'anything)
+;; heml
+(require 'helm-config)
+(helm-mode 1)
+(define-key global-map (kbd "C-x C-h") 'helm-mini)
 
 ;; rbenv-mode
 (require 'rbenv)

@@ -11,7 +11,7 @@
     linum
     auto-complete
     flycheck
-    anything
+    helm
     rbenv
     enh-ruby-mode
     ruby-electric
