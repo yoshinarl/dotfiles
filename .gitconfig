@@ -2,7 +2,7 @@
     name =
     email =
 [core]
-    excludesfile =
+    excludesfile = ~/.gitignore
     edirot = "vim"
 [alias]
     st = status
