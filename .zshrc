@@ -47,6 +47,7 @@ zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'c
 alias ls="ls -G"
 alias ll="ls -lG"
 alias rm="rmtrash"
+alias be="bundle exec"
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
@@ -102,6 +103,7 @@ RPROMPT='[`rprompt-git-current-branch`]'
 # git alias
 alias gst="git status -s -b"
 alias giff="git diff"
+alias gitwip="git add . && git commit -m 'WIP'"
 
 # シェル立ち上げ時に稼働時間を出力するようにする
 uptime
