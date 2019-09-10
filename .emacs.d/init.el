@@ -477,3 +477,13 @@ With argument, do this that many times."
 (require 'rufo)
 (add-hook 'enh-ruby-mode-hook 'rufo-minor-mode)
 (setq rufo-minor-mode-use-bundler t)
+
+;; protobuf-mode
+(require 'protobuf-mode)
+(setq auto-mode-alist (append '(("\\.proto$" . protobuf-mode)) auto-mode-alist))
+(defconst my-protobuf-style
+  '((c-basic-offset . 4)
+    (indent-tabs-mode . nil)))
+
+(add-hook 'protobuf-mode-hook
+  (lambda () (c-add-style "my-style" my-protobuf-style t)))
