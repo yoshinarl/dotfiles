@@ -44,10 +44,16 @@ export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 
 # alias
-alias ls="ls -G"
-alias ll="ls -lG"
-alias rm="rmtrash"
+alias ...="cd ..."
+alias ..="cd .."
 alias be="bundle exec"
+alias c="pbcopy"
+alias cp="cp -i"
+alias g="git"
+alias ll="ls -lG"
+alias ls="ls -G"
+alias mv="mv -i"
+alias rm="rmtrash"
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
