@@ -363,7 +363,7 @@ With argument, do this that many times."
   '(custom-set-variables
     '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))))
 
-;; heml
+;; helm
 (require 'helm-config)
 (helm-mode 1)
 (define-key global-map (kbd "C-x C-h") 'helm-mini)
