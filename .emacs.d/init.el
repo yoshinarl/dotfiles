@@ -256,6 +256,7 @@
 
 ;; C-z を無効化
 (global-unset-key "\C-z")
+(global-set-key "\C-z" nil)
 
 ;; タイトルバーにファイルのフルパス表示
 (setq frame-title-format
