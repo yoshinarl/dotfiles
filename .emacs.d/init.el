@@ -356,9 +356,7 @@ With argument, do this that many times."
 (require 'flycheck)
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
 (add-hook 'after-init-hook #'global-flycheck-mode)
-;; rufo 使うので無効化
-;; (add-hook 'enh-ruby-mode-hook 'flycheck-mode)
-;; jshint を優先して見るので無効化
+(add-hook 'enh-ruby-mode-hook 'flycheck-mode)
 (eval-after-load 'flycheck
   '(custom-set-variables
     '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))))
