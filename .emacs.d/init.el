@@ -309,6 +309,11 @@ With argument, do this that many times."
 
 (global-set-key (read-kbd-macro "<M-DEL>") 'backward-delete-word)
 
+;; mini buffer に改行コードを表示する
+(setq eol-mnemonic-dos "(CRLF)")
+(setq eol-mnemonic-mac "(CR)")
+(setq eol-mnemonic-unix "(LF)")
+
 ;;  ---------------
 ;; |    package    |
 ;;  ---------------
