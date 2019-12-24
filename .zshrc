@@ -4,8 +4,6 @@ compinit
 autoload -U select-word-style
 select-word-style bash
 
-export LANG=ja_JP.UTF-8
-
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
@@ -57,15 +55,10 @@ alias rm="rmtrash"
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-export PATH=/usr/local/bin:$PATH
-export PATH=/usr/local/sbin:$PATH
-
 # nodenv
-export PATH="$HOME/.nodenv/bin:$PATH"
 eval "$(nodenv init -)"
 
 # rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
 # git color
