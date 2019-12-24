@@ -19,7 +19,7 @@
  '(flycheck-disabled-checkers (quote (javascript-jshint javascript-jscs)))
  '(package-selected-packages
    (quote
-    (rufo web-mode ac-emmet emmet-mode emmet haml-mode js2-mode ag projectile-rails projectile rubocop ruby-block ruby-electric enh-ruby-mode flycheck auto-complete inflections)))
+    (exec-path-from-shell tide typescript-mode rubocop rufo web-mode ac-emmet emmet-mode emmet haml-mode js2-mode ag ruby-block ruby-electric enh-ruby-mode flycheck auto-complete inflections)))
  '(session-use-package t nil (session)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -421,9 +421,15 @@ With argument, do this that many times."
 (require 'js2-mode)
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode))
 (add-hook 'js2-jsx-mode-hook 'emmet-mode)
 (setq-default js2-basic-offset 2)
+
+;; typescript-mode
+(require 'typescript-mode)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-hook 'typescript-mode-hook
+  '(lambda ()
+     (setq typescript-indent-level 2)))
 
 ;; haml-mode
 (require 'haml-mode)
@@ -493,8 +499,17 @@ With argument, do this that many times."
 ;; web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(setq web-mode-markup-indent-offset 2)
+(add-to-list 'auto-mode-alist '("\\.[jt]sx\\'" . web-mode))
 (add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook
+          '(lambda ()
+             (setq web-mode-attr-indent-offset nil)
+             (setq web-mode-markup-indent-offset 2)
+             (setq web-mode-css-indent-offset 2)
+             (setq web-mode-code-indent-offset 2)
+             (setq web-mode-sql-indent-offset 2)
+             (setq indent-tabs-mode nil)
+             (setq tab-width 2)))
 
 ;; rufo.el
 (require 'rufo)
@@ -507,6 +522,14 @@ With argument, do this that many times."
 (defconst my-protobuf-style
   '((c-basic-offset . 4)
     (indent-tabs-mode . nil)))
-
 (add-hook 'protobuf-mode-hook
   (lambda () (c-add-style "my-style" my-protobuf-style t)))
+
+;; lsp-mode
+(require 'lsp-mode)
+(add-hook 'web-mode-hook #'lsp)
+
+;; exec-path-from-shell
+(setq exec-path-from-shell-shell-name "zsh")
+(exec-path-from-shell-initialize)
+(exec-path-from-shell-copy-envs '("PATH" "GOPATH" "LANG"))

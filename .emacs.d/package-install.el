@@ -28,6 +28,9 @@
     emmet-mode
     elscreen
     web-mode
+    typescript-mode
+    lsp-mode
+    exec-path-from-shell
     ))
 
 ;; my/favorite-packagesからインストールしていないパッケージをインストール
