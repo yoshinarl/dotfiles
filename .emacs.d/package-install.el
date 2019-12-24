@@ -17,8 +17,6 @@
     ruby-electric
     ruby-block
     rubocop
-    projectile
-    projectile-rails
     ag
     js2-mode
     haml-mode

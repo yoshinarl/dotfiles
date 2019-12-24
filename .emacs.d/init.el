@@ -406,12 +406,6 @@ With argument, do this that many times."
 ;; (require 'rubocop)
 ;; (add-hook 'enh-ruby-mode-hook 'rubocop-mode)
 
-;; Projectile Rails
-(require 'projectile)
-(projectile-global-mode)
-(require 'projectile-rails)
-(add-hook 'projectile-mode-hook 'projectile-rails-on)
-
 ;; ag
 (require 'ag)
 (setq ag-highlight-search t)
