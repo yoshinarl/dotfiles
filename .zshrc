@@ -59,11 +59,9 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 export PATH=/usr/local/bin:$PATH
 
-# nodenv
-eval "$(nodenv init -)"
-
-# rbenv
-eval "$(rbenv init -)"
+# anyenv
+export PAATH="${HOME}/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
 
 # git color
 autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
