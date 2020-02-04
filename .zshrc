@@ -44,11 +44,20 @@ export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46
 zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
 
 # alias
-alias ls="ls -G"
+alias ...="cd ..."
+alias ..="cd .."
+alias be="bundle exec"
+alias c="pbcopy"
+alias cp="cp -i"
+alias g="git"
 alias ll="ls -lG"
+alias ls="ls -G"
+alias mv="mv -i"
 alias rm="rmtrash"
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+export PATH=/usr/local/bin:$PATH
 
 # anyenv
 export PAATH="${HOME}/.anyenv/bin:$PATH"
@@ -87,17 +96,18 @@ function rprompt-git-current-branch {
         color=%F{red}
     fi
 
-    echo "$color$name$action%f%b "
+    echo "$color$name$action%f%b"
 }
 
 # プロンプトが表示されるたびにプロンプト文字列を評価、置換する
 setopt prompt_subst
 
-RPROMPT='[`rprompt-git-current-branch`%~]'
+RPROMPT='[`rprompt-git-current-branch`]'
 
 # git alias
-alias gst='git status -s -b'
-alias giff='git diff'
+alias gst="git status -s -b"
+alias giff="git diff"
+alias gitwip="git add . && git commit -m 'WIP'"
 
 # シェル立ち上げ時に稼働時間を出力するようにする
 uptime

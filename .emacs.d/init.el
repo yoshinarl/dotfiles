@@ -3,12 +3,30 @@
 ;;  ---------------
 
 ;; ロードパス
+(setq load-path (cons "~/.emacs.d/elisp" load-path))
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(flycheck-disabled-checkers (quote (javascript-jshint javascript-jscs)))
+ '(package-selected-packages
+   (quote
+    (rufo web-mode ac-emmet emmet-mode emmet haml-mode js2-mode ag projectile-rails projectile rubocop ruby-block ruby-electric enh-ruby-mode flycheck auto-complete inflections)))
+ '(session-use-package t nil (session)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 ;; 環境変数パス
 (dolist (dir (list
@@ -24,10 +42,7 @@
    (setenv "PATH" (concat dir ":" (getenv "PATH")))
    (setq exec-path (append (list dir) exec-path))))
 
-;; homebrwe でインストールしたツールを使う
-(add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
-
-;; homebrwe でインストールしたツールを使う
+;; homebrew でインストールしたツールを使う
 (add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
 
 ;; 対応する括弧を光らせる
@@ -86,8 +101,8 @@
 ;; 起動時のサイズ、表示位置、フォントを設定
 (setq initial-frame-alist
       (append (list
-               '(width . 97)
-               '(height . 60)
+               '(width . 175)
+               '(height . 110)
                '(top . 0)
                '(left . 0)
                '(right . 0)
@@ -159,9 +174,6 @@
               (- (region-end) (region-beginning)))
       ;;(count-lines-region (region-beginning) (region-end)) ;; これだとエコーエリアがチラつく
     ""))
-
-(add-to-list 'default-mode-line-format
-             '(:eval (count-lines-and-chars)))
 
 ;; スクロールを加速させない
 (global-set-key [wheel-up] '(lambda () "" (interactive) (scroll-down 1)))
@@ -244,6 +256,7 @@
 
 ;; C-z を無効化
 (global-unset-key "\C-z")
+(global-set-key "\C-z" nil)
 
 ;; タイトルバーにファイルのフルパス表示
 (setq frame-title-format
@@ -281,6 +294,45 @@
 (set-face-attribute 'whitespace-empty nil
                     :background my/bg-color)
 
+;; M-backspace で kill-ring に追加しない
+(defun delete-word (arg)
+  "Delete characters forward until encountering the end of a word.
+With argument, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (forward-word arg) (point))))
+
+(defun backward-delete-word (arg)
+  "Delete characters backward until encountering the end of a word.
+With argument, do this that many times."
+  (interactive "p")
+  (delete-word (- arg)))
+
+(global-set-key (read-kbd-macro "<M-DEL>") 'backward-delete-word)
+
+(defun align-regexp-repeated (start stop regexp)
+  "Like align-regexp, but repeated for multiple columns. See http://www.emacswiki.org/emacs/AlignCommands"
+  (interactive "r\nsAlign regexp: ")
+  (let ((spacing 1)
+        (old-buffer-size (buffer-size)))
+    ;; If our align regexp is just spaces, then we don't need any
+    ;; extra spacing.
+    (when (string-match regexp " ")
+      (setq spacing 0))
+    (align-regexp start stop
+                  ;; add space at beginning of regexp
+                  (concat "\\([[:space:]]*\\)" regexp)
+                  1 spacing t)
+    ;; modify stop because align-regexp will add/remove characters
+    (align-regexp start (+ stop (- (buffer-size) old-buffer-size))
+                  ;; add space at end of regexp
+                  (concat regexp "\\([[:space:]]*\\)")
+                  1 spacing t)))
+
+;; mini buffer に改行コードを表示する
+(setq eol-mnemonic-dos "(CRLF)")
+(setq eol-mnemonic-mac "(CR)")
+(setq eol-mnemonic-unix "(LF)")
+
 ;;  ---------------
 ;; |    package    |
 ;;  ---------------
@@ -305,19 +357,28 @@
 (setq flycheck-check-syntax-automatically '(mode-enabled save))
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (add-hook 'enh-ruby-mode-hook 'flycheck-mode)
+(eval-after-load 'flycheck
+  '(custom-set-variables
+    '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))))
 
-;; anything
-(require 'anything)
-(require 'anything-startup)
-(define-key global-map (kbd "C-x C-a") 'anything)
+;; helm
+(require 'helm-config)
+(helm-mode 1)
+(define-key global-map (kbd "C-x C-h") 'helm-mini)
+
+;; rbenv-mode
+(require 'rbenv)
+(global-rbenv-mode)
+(setq rbenv-installation-dir "/usr/local/Cellar/rbenv")
 
 ;; enh-ruby-mode
 (require 'enh-ruby-mode)
 (autoload 'enh-ruby-mode "enh-ruby-mode"
   "Mode for editing ruby source files" t)
-(add-to-list 'auto-mode-alist '("\\.rb$" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("Capfile$" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile$" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist
+             '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
+(add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
+
 ;; "encoding を自動挿入しない"
 (defun remove-enh-magic-comment ()
   (remove-hook 'before-save-hook 'enh-ruby-mode-set-encoding t))
@@ -338,29 +399,18 @@
 
 ;; ruby-block
 (require 'ruby-block)
+(ruby-block-mode t)
 (setq ruby-block-highlight-toggle t)
 
 ;; rubocop
-(require 'rubocop)
-(add-hook 'enh-ruby-mode-hook 'rubocop-mode)
+;; (require 'rubocop)
+;; (add-hook 'enh-ruby-mode-hook 'rubocop-mode)
 
 ;; Projectile Rails
 (require 'projectile)
 (projectile-global-mode)
 (require 'projectile-rails)
 (add-hook 'projectile-mode-hook 'projectile-rails-on)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (inflections))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;; ag
 (require 'ag)
@@ -371,6 +421,9 @@
 (require 'js2-mode)
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode))
+(add-hook 'js2-jsx-mode-hook 'emmet-mode)
+(setq-default js2-basic-offset 2)
 
 ;; haml-mode
 (require 'haml-mode)
@@ -393,3 +446,67 @@
 (require 'hiwin)
 (hiwin-activate)
 (set-face-background 'hiwin-face "#666666")
+
+;; emmet-mode
+(require 'emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; マークアップ言語全部で使う
+(setq emmet-expand-jsx-className? t) ;; jsx で使う
+(eval-after-load "emmet-mode"
+  '(define-key emmet-mode-keymap (kbd "C-j") nil)) ;; C-j は newline のままにしておく
+(keyboard-translate ?\C-i ?\H-i) ;;C-i と Tabの被りを回避
+(define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line) ;; C-i で展開
+(add-hook 'emmet-mode-hook (lambda () (setq emmet-indent-after-insert nil)))
+(add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2))) ;; indent 2 spaces.
+(setq emmet-move-cursor-between-quotes t) ;; default nil
+
+;; elscreen
+(require 'elscreen)
+;;; プレフィクスキーはC-z
+(setq elscreen-prefix-key (kbd "C-z"))
+(elscreen-start)
+;;; タブの先頭に[X]を表示しない
+(setq elscreen-tab-display-kill-screen nil)
+;;; header-lineの先頭に[<->]を表示しない
+(setq elscreen-tab-display-control nil)
+;;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
+(setq elscreen-buffer-to-nickname-alist
+      '(("^dired-mode$" .
+         (lambda ()
+           (format "Dired(%s)" dired-directory)))
+        ("^Info-mode$" .
+         (lambda ()
+           (format "Info(%s)" (file-name-nondirectory Info-current-file))))
+        ("^mew-draft-mode$" .
+         (lambda ()
+           (format "Mew(%s)" (buffer-name (current-buffer)))))
+        ("^mew-" . "Mew")
+        ("^irchat-" . "IRChat")
+        ("^liece-" . "Liece")
+        ("^lookup-" . "Lookup")))
+(setq elscreen-mode-to-nickname-alist
+      '(("[Ss]hell" . "shell")
+        ("compilation" . "compile")
+        ("-telnet" . "telnet")
+        ("dict" . "OnlineDict")
+        ("*WL:Message*" . "Wanderlust")))
+
+;; web-mode
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(setq web-mode-markup-indent-offset 2)
+(add-hook 'web-mode-hook 'emmet-mode)
+
+;; rufo.el
+(require 'rufo)
+(add-hook 'enh-ruby-mode-hook 'rufo-minor-mode)
+(setq rufo-minor-mode-use-bundler t)
+
+;; protobuf-mode
+(require 'protobuf-mode)
+(setq auto-mode-alist (append '(("\\.proto$" . protobuf-mode)) auto-mode-alist))
+(defconst my-protobuf-style
+  '((c-basic-offset . 4)
+    (indent-tabs-mode . nil)))
+
+(add-hook 'protobuf-mode-hook
+  (lambda () (c-add-style "my-style" my-protobuf-style t)))

@@ -11,7 +11,8 @@
     linum
     auto-complete
     flycheck
-    anything
+    helm
+    rbenv
     enh-ruby-mode
     ruby-electric
     ruby-block
@@ -24,6 +25,9 @@
     hiwin
     minibuf-isearch session
     git-gutter-fringe+
+    emmet-mode
+    elscreen
+    web-mode
     ))
 
 ;; my/favorite-packagesからインストールしていないパッケージをインストール
