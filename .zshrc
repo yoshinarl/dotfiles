@@ -101,4 +101,3 @@ alias giff='git diff'
 
 # シェル立ち上げ時に稼働時間を出力するようにする
 uptime
-source /usr/local/bin/aws_zsh_completer.sh
