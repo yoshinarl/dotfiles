@@ -55,11 +55,11 @@ alias rm="rmtrash"
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# nodenv
-eval "$(nodenv init -)"
+export PATH=/usr/local/bin:$PATH
 
-# rbenv
-eval "$(rbenv init -)"
+# anyenv
+export PATH="${HOME}/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
 
 # git color
 autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
