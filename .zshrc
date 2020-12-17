@@ -109,3 +109,6 @@ alias gitwip="git add . && git commit -m 'WIP'"
 
 # シェル立ち上げ時に稼働時間を出力するようにする
 uptime
+
+export YVM_DIR=/usr/local/opt/yvm
+[ -r $YVM_DIR/yvm.sh ] && . $YVM_DIR/yvm.sh
