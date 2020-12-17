@@ -2,6 +2,9 @@
 ;; |   共通設定    |
 ;;  ---------------
 
+(setq default-directory "~/")
+(setq command-line-default-directory "~/")
+
 ;; ロードパス
 (setq load-path (cons "~/.emacs.d/elisp" load-path))
 
