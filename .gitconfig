@@ -1,6 +1,5 @@
 [user]
-    name =
-    email =
+    email = 7158259+yoshinarl@users.noreply.github.com
 [core]
     excludesfile = ~/.gitignore
     edirot = "vim"
