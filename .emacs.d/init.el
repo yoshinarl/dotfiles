@@ -333,6 +333,12 @@ With argument, do this that many times."
 (setq eol-mnemonic-mac "(CR)")
 (setq eol-mnemonic-unix "(LF)")
 
+;; for json format
+(defun format-json (beg end)
+  (interactive "r")
+  (shell-command-on-region beg end "jq ." nil t))
+
+
 ;;  ---------------
 ;; |    package    |
 ;;  ---------------
