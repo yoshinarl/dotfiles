@@ -424,6 +424,9 @@ With argument, do this that many times."
 (require 'js2-mode)
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . js2-jsx-mode))
 (add-hook 'js2-jsx-mode-hook 'emmet-mode)
 (setq-default js2-basic-offset 2)
 
@@ -460,6 +463,7 @@ With argument, do this that many times."
 (require 'emmet-mode)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; マークアップ言語全部で使う
 (setq emmet-expand-jsx-className? t) ;; jsx で使う
+(setq emmet-expand-tsx-className? t) ;; tsx で使う
 (eval-after-load "emmet-mode"
   '(define-key emmet-mode-keymap (kbd "C-j") nil)) ;; C-j は newline のままにしておく
 (keyboard-translate ?\C-i ?\H-i) ;;C-i と Tabの被りを回避
