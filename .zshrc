@@ -4,8 +4,6 @@ compinit
 autoload -U select-word-style
 select-word-style bash
 
-export LANG=ja_JP.UTF-8
-
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
@@ -60,7 +58,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 export PATH=/usr/local/bin:$PATH
 
 # anyenv
-export PAATH="${HOME}/.anyenv/bin:$PATH"
+export PATH="${HOME}/.anyenv/bin:$PATH"
 eval "$(anyenv init -)"
 
 # git color
@@ -111,3 +109,6 @@ alias gitwip="git add . && git commit -m 'WIP'"
 
 # シェル立ち上げ時に稼働時間を出力するようにする
 uptime
+
+export YVM_DIR=/usr/local/opt/yvm
+[ -r $YVM_DIR/yvm.sh ] && . $YVM_DIR/yvm.sh

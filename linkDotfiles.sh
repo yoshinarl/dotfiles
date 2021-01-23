@@ -8,3 +8,4 @@ ln -is .pryrc ~/.pryrc
 ln -is .Brewfile ~/.Brewfile
 ln -is vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
 ln -is vscode/snippets ~/Library/Application\ Support/Code/User/snippets
+ln -is .tigrc ~/.tigrc

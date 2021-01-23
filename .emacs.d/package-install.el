@@ -17,8 +17,6 @@
     ruby-electric
     ruby-block
     rubocop
-    projectile
-    projectile-rails
     ag
     js2-mode
     haml-mode
@@ -28,6 +26,9 @@
     emmet-mode
     elscreen
     web-mode
+    typescript-mode
+    lsp-mode
+    exec-path-from-shell
     ))
 
 ;; my/favorite-packagesからインストールしていないパッケージをインストール
