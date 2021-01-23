@@ -1,11 +1,10 @@
 #!/bin/sh
 
-ln -is .emacs.d ~/.emacs.d
-ln -is .zshrc ~/.zshrc
-ln -is .gitconfig ~/.gitconfig
-ln -is .inputrc ~/.inputrc
-ln -is .pryrc ~/.pryrc
-ln -is .Brewfile ~/.Brewfile
-ln -is vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
-ln -is vscode/snippets ~/Library/Application\ Support/Code/User/snippets
-ln -is .tigrc ~/.tigrc
+PWD=$(cd $(dirname $0);pwd)
+ln -is $PWD/.emacs.d ~/.emacs.d
+ln -is $PWD/.zshrc ~/.zshrc
+ln -is $PWD/.gitconfig ~/.gitconfig
+ln -is $PWD/.inputrc ~/.inputrc
+ln -is $PWD/.pryrc ~/.pryrc
+ln -is $PWD/.Brewfile ~/.Brewfile
+ln -is $PWD/.tigrc ~/.tigrc
