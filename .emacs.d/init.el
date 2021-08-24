@@ -415,11 +415,6 @@ With argument, do this that many times."
 ;; (require 'rubocop)
 ;; (add-hook 'enh-ruby-mode-hook 'rubocop-mode)
 
-;; ag
-(require 'ag)
-(setq ag-highlight-search t)
-(setq ag-reuse-buffers t)
-
 ;; js2-mode
 (require 'js2-mode)
 (autoload 'js2-mode "js2-mode" nil t)
