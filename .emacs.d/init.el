@@ -450,9 +450,9 @@ With argument, do this that many times."
 
 ;; hiwin-mode
 ;; 非アクティブのバッファの色を変える
-(require 'hiwin)
-(hiwin-activate)
-(set-face-background 'hiwin-face "#666666")
+;; (require 'hiwin)
+;; (hiwin-activate)
+;; (set-face-background 'hiwin-face "#666666")
 
 ;; emmet-mode
 (require 'emmet-mode)
