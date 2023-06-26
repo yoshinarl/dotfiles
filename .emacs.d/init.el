@@ -68,323 +68,402 @@
 ;;  ---------------
 ;; |   共通設定    |
 ;;  ---------------
-
-(setq default-directory "~/")
-(setq command-line-default-directory "~/")
+(leaf default-directory
+  :setq ((default-directory . "~/")
+         (command-line-default-directory . "~/")))
 
 ;; ロードパス
-(setq load-path (cons "~/.emacs.d/elisp" load-path))
+(leaf load-path
+  :config
+  (setq load-path (cons "~/.emacs.d/elisp" load-path)))
 
 ;; 環境変数パス
-(dolist (dir (list
-              "/sbin"
-              "/usr/sbin"
-              "/bin"
-              "/usr/bin"
-              "/usr/local/bin"
-              (expand-file-name "~/bin")
-              (expand-file-name "~/.emacs.d/bin")
-              ))
- (when (and (file-exists-p dir) (not (member dir exec-path)))
-   (setenv "PATH" (concat dir ":" (getenv "PATH")))
-   (setq exec-path (append (list dir) exec-path))))
+(leaf env-path
+  :config
+  (dolist (dir
+           (list "/sbin" "/usr/sbin" "/bin" "/usr/bin" "/usr/local/bin"
+                 (expand-file-name "~/bin")
+                 (expand-file-name "~/.emacs.d/bin")))
+    (when (and
+           (file-exists-p dir)
+           (not (member dir exec-path)))
+      (setenv "PATH"
+              (concat dir ":"
+                      (getenv "PATH")))
+      (setq exec-path (append
+                       (list dir)
+                       exec-path)))))
 
 ;; homebrew でインストールしたツールを使う
-(add-to-list 'exec-path (expand-file-name "/usr/local/bin"))
+;; (leaf homebrew-path
+;;   :config
+;;   (Add-to-list 'exec-path
+;;                (expand-file-name "/usr/local/bin")))
 
-;; 対応する括弧を光らせる
-(show-paren-mode 1)
-
-;; バックアップファイルを作らない
-(setq backup-inhibited t)
-
-;; 終了時にオートセーブファイルを消す
-(setq delete-auto-save-files t)
-
-;; 保存時に行末の空白を削除
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; optionキーをMetaキーとして利用
-(setq mac-option-modifier 'meta)
-
-;; Returnでオートインデント
-(global-set-key "\C-m" 'newline-and-indent)
-
-;; C-hをBSに
-(global-set-key "\C-h" 'backward-delete-char)
-
-;; C-x C-gでM-x goto-line
-(global-set-key "\C-x\C-g" 'goto-line)
-
-;; 分割した画面間をShift+矢印で移動
-(setq windmove-wrap-around t)
-(windmove-default-keybindings)
+(leaf general
+  :bind (
+         ;; Returnでオートインデント
+         ("" . newline-and-indent)
+         ;; C-hをBSに
+         ("" . backward-delete-char)
+         ;; C-x C-gでM-x goto-line
+         ("" . goto-line))
+  :hook (
+         ;; 保存時に行末の空白を削除
+         (before-save-hook . delete-trailing-whitespace))
+  :setq (
+         ;; バックアップファイルを作らない
+         (backup-inhibited . t)
+         ;; 終了時にオートセーブファイルを消す
+         (delete-auto-save-files . t)
+         ;; optionキーをMetaキーとして利用
+         (mac-option-modifier quote meta)
+         ;; 1行ずつスクロールする
+         (scroll-step . 1)
+         ;; ウィンドウ分割時も右端で折り返す
+         (truncate-partial-width-windows)
+         ;; emacs終了時に確認する
+         (confirm-kill-emacs quote y-or-n-p)
+         ;; 最終行に必ず一行挿入する
+         (require-final-newline . t)
+         ;; mini buffer に改行コードを表示する
+         (eol-mnemonic-dos . "(CRLF)")
+         (eol-mnemonic-mac . "(CR)")
+         (eol-mnemonic-unix . "(LF)"))
+  :bind(
+        ;; C-z を無効化
+        (""))
+  :config
+  ;; 対応する括弧を光らせる
+  (show-paren-mode 1)
+  ;; 選択範囲をハイライト表示
+  (transient-mark-mode t)
+  ;; ファイルに変更があったら自動で再読み込みする
+  (global-auto-revert-mode 1)
+  ;; タイトルバーにファイルのフルパス表示
+  (setq frame-title-format (format "%%b - %%f")))
 
 ;; 音を出さない
-(setq ring-bell-function 'ignore)
-(put 'upcase-region 'disabled nil)
-
-;; 日本語設定
-(set-language-environment 'Japanese)
-(set-default-coding-systems 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-buffer-file-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
+(leaf ignore-ring-bell
+  :setq ((ring-bell-function quote ignore)))
 
 ;; メニューバー非表示
-(tool-bar-mode 0)
-(menu-bar-mode 0)
+(leaf hide-menu-bar
+  :config
+  (tool-bar-mode 0)
+  (menu-bar-mode 0))
 
-;; 選択範囲をハイライト表示
-(transient-mark-mode t)
+;; 分割した画面間をShift+矢印で移動
+(leaf windmove
+  :setq ((windmove-wrap-around . t))
+  :config
+  (windmove-default-keybindings))
 
-;; タブ幅を2に設定。タブを使わずスペースにする
-(setq-default tab-width 2 indent-tabs-mode nil)
+;; 日本語設定
+(leaf japanese
+  :config
+  (set-language-environment 'Japanese)
+  (set-default-coding-systems 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-buffer-file-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8))
 
-;; タブ幅の倍数を設定
-(setq tab-stop-list '(2 4 6 8 10 12 14 16 18 20))
+(leaf tab
+  :setq (
+         ;; タブ幅の倍数を設定
+         (tab-stop-list quote
+                        (2 4 6 8 10 12 14 16 18 20)))
+  :setq-default (
+                 ;; タブ幅を2に設定
+                 (tab-width . 2)
+                 ;; タブを使わずスペースにする
+                 (indent-tabs-mode)))
 
 ;; 起動時のサイズ、表示位置、フォントを設定
-(setq initial-frame-alist
-      (append (list
-               '(width . 175)
-               '(height . 110)
-               '(top . 0)
-               '(left . 0)
-               '(right . 0)
-               )
-              initial-frame-alist))
-(setq default-frame-alist initial-frame-alist)
-
-;; 1行ずつスクロールする
-(setq scroll-step 1)
+(leaf default-frame
+  :setq ((default-frame-alist . initial-frame-alist))
+  :config
+  (setq initial-frame-alist (append
+                             (list
+                              '(width . 175)
+                              '(height . 110)
+                              '(top . 0)
+                              '(left . 0)
+                              '(right . 0))
+                             initial-frame-alist)))
 
 ;; 括弧の自動補完
-(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "\'") 'skeleton-pair-insert-maybe)
-(setq skeleton-pair 1)
+(leaf skelton-pair
+  :bind (("(" . skeleton-pair-insert-maybe)
+         ("{" . skeleton-pair-insert-maybe)
+         ("[" . skeleton-pair-insert-maybe)
+         ("\"" . skeleton-pair-insert-maybe)
+         ("'" . skeleton-pair-insert-maybe))
+  :setq ((skeleton-pair . 1)))
 
 ;; フォント変更->Ricty
-(let* ((size 13)
-           (asciifont "Ricty") ; ASCII fonts
-           (jpfont "Ricty") ; Japanese fonts
-           (h (* size 11))
-           (fontspec (font-spec :family asciifont))
-           (jp-fontspec (font-spec :family jpfont)))
-      (set-face-attribute 'default nil :family asciifont :height h)
-      (set-fontset-font nil 'japanese-jisx0213.2004-1 jp-fontspec)
-      (set-fontset-font nil 'japanese-jisx0213-2 jp-fontspec)
-      (set-fontset-font nil 'katakana-jisx0201 jp-fontspec)
-      (set-fontset-font nil '(#x0080 . #x024F) fontspec)
-      (set-fontset-font nil '(#x0370 . #x03FF) fontspec))
-
-;; ウィンドウ分割時も右端で折り返す
-(setq truncate-partial-width-windows nil)
+(leaf font
+  :config
+  (let* ((size 13)
+         (asciifont "Ricty")
+         (jpfont "Ricty")
+         (h (* size 11))
+         (fontspec (font-spec :family asciifont))
+         (jp-fontspec (font-spec :family jpfont)))
+    (set-face-attribute 'default nil :family asciifont :height h)
+    (set-fontset-font nil 'japanese-jisx0213\.2004-1 jp-fontspec)
+    (set-fontset-font nil 'japanese-jisx0213-2 jp-fontspec)
+    (set-fontset-font nil 'katakana-jisx0201 jp-fontspec)
+    (set-fontset-font nil
+                      '(128 . 591)
+                      fontspec)
+    (set-fontset-font nil
+                      '(880 . 1023)
+                      fontspec)))
 
 ;; フレームの3分割
 ;;  C-x@で縦3分割。C-x#で横3分割
-(defun split-window-vertically-n (num_wins)
-  (interactive "p")
-  (if (= num_wins 2)
-      (split-window-vertically)
-    (progn
-      (split-window-vertically
-       (- (window-height) (/ (window-height) num_wins)))
-      (split-window-vertically-n (- num_wins 1)))))
-(defun split-window-horizontally-n (num_wins)
-  (interactive "p")
-  (if (= num_wins 2)
-      (split-window-horizontally)
-    (progn
-      (split-window-horizontally
-       (- (window-width) (/ (window-width) num_wins)))
-      (split-window-horizontally-n (- num_wins 1)))))
-(global-set-key "\C-x@" '(lambda ()
-                           (interactive)
-                           (split-window-vertically-n 3)))
-(global-set-key "\C-x#" '(lambda ()
-                           (interactive)
-                           (split-window-horizontally-n 3)))
-
-;; 行末が長くなっても自動改行しない
-(add-hook 'yatex-mode-hook'(lambda ()(setq auto-fill-function nil)))
+(leaf split-3-frame
+  :preface
+  (defun split-window-vertically-n (num_wins)
+    (interactive "p")
+    (if (= num_wins 2)
+        (split-window-vertically)
+      (progn
+        (split-window-vertically
+         (-
+          (window-height)
+          (/
+           (window-height)
+           num_wins)))
+        (split-window-vertically-n
+         (- num_wins 1)))))
+  (defun split-window-horizontally-n (num_wins)
+    (interactive "p")
+    (if (= num_wins 2)
+        (split-window-horizontally)
+      (progn
+        (split-window-horizontally
+         (-
+          (window-width)
+          (/
+           (window-width)
+           num_wins)))
+        (split-window-horizontally-n
+         (- num_wins 1)))))
+  :config
+  (global-set-key "@"
+                  '(lambda nil
+                     (interactive)
+                     (split-window-vertically-n 3)))
+  (global-set-key "#"
+                  '(lambda nil
+                     (interactive)
+                     (split-window-horizontally-n 3))))
 
 ;; リージョン内の行数と文字数をモードラインに表示する
-(defun count-lines-and-chars ()
-  (if mark-active
-      (format "%d lines,%d chars "
-              (count-lines (region-beginning) (region-end))
-              (- (region-end) (region-beginning)))
-      ;;(count-lines-region (region-beginning) (region-end)) ;; これだとエコーエリアがチラつく
-    ""))
+(leaf count-lines-and-chars
+  :preface
+  (defun count-lines-and-chars nil
+    (if mark-active
+        (format "%d lines,%d chars "
+                (count-lines
+                 (region-beginning)
+                 (region-end))
+                (-
+                 (region-end)
+                 (region-beginning)))
+      ;; エコーエリアがちらつくのでコメントアウト
+      ;; (count-lines-region
+      ;;  (region-beginning)
+      ;;  (region-end))
+      "")))
 
 ;; スクロールを加速させない
-(global-set-key [wheel-up] '(lambda () "" (interactive) (scroll-down 1)))
-(global-set-key [wheel-down] '(lambda () "" (interactive) (scroll-up 1)))
-(global-set-key [double-wheel-up] '(lambda () "" (interactive) (scroll-down 1)))
-(global-set-key [double-wheel-down] '(lambda () "" (interactive) (scroll-up 1)))
-(global-set-key [triple-wheel-up] '(lambda () "" (interactive) (scroll-down 2)))
-(global-set-key [triple-wheel-down] '(lambda () "" (interactive) (scroll-up 2)))
+(leaf scroll-acceleration
+  :config
+  (global-set-key
+   [wheel-up]
+   '(lambda nil
+      ""
+      (interactive)
+      (scroll-down 1)))
+  (global-set-key
+   [wheel-down]
+   '(lambda nil
+      ""
+      (interactive)
+      (scroll-up 1)))
+  (global-set-key
+   [double-wheel-up]
+   '(lambda nil
+      ""
+      (interactive)
+      (scroll-down 1)))
+  (global-set-key
+   [double-wheel-down]
+   '(lambda nil
+      ""
+      (interactive)
+      (scroll-up 1)))
+  (global-set-key
+   [triple-wheel-up]
+   '(lambda nil
+      ""
+      (interactive)
+      (scroll-down 2)))
+  (global-set-key
+   [triple-wheel-down]
+   '(lambda nil
+      ""
+      (interactive)
+      (scroll-up 2))))
 
 ;; 各種色設定
-(if window-system (progn
-;; 文字の色を設定します。
-  (add-to-list 'default-frame-alist '(foreground-color . "#EEEEEE"))
+(leaf color
+  :when window-system
+  :config
+  ;; 文字の色を設定します。
+  (add-to-list 'default-frame-alist
+               '(foreground-color . "#EEEEEE"))
   ;; 背景色を設定します。
-  (add-to-list 'default-frame-alist '(background-color . "#333333"))
+  (add-to-list 'default-frame-alist
+               '(background-color . "#333333"))
   ;; 背景透明
-;;  (set-frame-parameter nil 'alpha 95)
+  (set-frame-parameter nil 'alpha 95)
   ;; カーソルの色を設定します。
-  (add-to-list 'default-frame-alist '(cursor-color . "SlateBlue2"))
+  (add-to-list 'default-frame-alist
+               '(cursor-color . "SlateBlue2"))
   ;; マウスポインタの色を設定します。
-;;  (add-to-list 'default-frame-alist '(mouse-color . "SlateBlue2"))
+  ;; (add-to-list 'default-frame-alist
+  ;;              '(mouse-color . "SlateBlue2"))
   ;; モードラインの文字の色を設定します。
-;;  (set-face-foreground 'modeline "white")
+  ;; (set-face-foreground 'modeline "white")
   ;; モードラインの背景色を設定します。
-;;  (set-face-background 'modeline "MediumPurple2")
+  ;; (set-face-background 'modeline "MediumPurple2")
   ;; 選択中のリージョンの色を設定します。
-;;  (set-face-background 'region "LightSteelBlue1")
+  ;; (set-face-background 'region "LightSteelBlue1")
   ;; モードライン（アクティブでないバッファ）の文字色を設定します。
-;;  (set-face-foreground 'mode-line-inactive "gray30")
+  ;; (set-face-foreground 'mode-line-inactive "gray30")
   ;; モードライン（アクティブでないバッファ）の背景色を設定します。
-;;  (set-face-background 'mode-line-inactive "gray85")
-))
+  ;; (set-face-background 'mode-line-inactive "gray85")
+  )
 
 ;; C-a で空白を除く行頭へ移動
 ;; インデント文字を飛ばした行頭に戻る。
 ;; ただし、ポイントから行頭までの間にインデント文字しかない場合は、行頭に戻る。
-(global-set-key "\C-a" 'beggining-of-indented-line)
-(defun beggining-of-indented-line (current-point)
-  (interactive "d")
-  (if (string-match
-       "^[ \t]+$"
-       (save-excursion
-         (buffer-substring-no-properties
-          (progn (beginning-of-line) (point))
-          current-point)))
-      (beginning-of-line)
-    (back-to-indentation)))
+(leaf beggining-of-indented-line
+  :preface
+  (defun beggining-of-indented-line (current-point)
+    (interactive "d")
+    (if (string-match "^[ 	]+$"
+                      (save-excursion
+                        (buffer-substring-no-properties
+                         (progn
+                           (beginning-of-line)
+                           (point))
 
-;; emacs終了時に確認する
-(setq confirm-kill-emacs 'y-or-n-p)
-
-;; 最終行に必ず一行挿入する
-(setq require-final-newline t)
-
-;; ファイルに変更があったら自動で再読み込みする
-(global-auto-revert-mode 1)
+                         current-point)))
+        (beginning-of-line)
+      (back-to-indentation)))
+  :bind (("" . beggining-of-indented-line)))
 
 ;; 行の移動を実装
 ;; Shift-Alt-p: 上へ移動
 ;; Shift-Alt-n: 下へ移動
-(defun move-line-down ()
-  (interactive)
-  (let ((col (current-column)))
-    (save-excursion
-      (forward-line)
-      (transpose-lines 1))
-    (forward-line)))
+(leaf move-line
+  :preface
+  (defun move-line-down nil
+    (interactive)
+    (let ((col (current-column)))
+      (save-excursion
+        (forward-line)
+        (transpose-lines 1))
+      (forward-line)))
 
-(defun move-line-up ()
-  (interactive)
-  (let ((col (current-column)))
-    (save-excursion
-      (forward-line)
-      (transpose-lines -1))
-    (move-to-column col)
-    (previous-line)))
+  (defun move-line-up nil
+    (interactive)
+    (let ((col (current-column)))
+      (save-excursion
+        (forward-line)
+        (transpose-lines -1))
+      (move-to-column col)
+      (previous-line)))
 
-(global-set-key (kbd "M-P") 'move-line-up)
-(global-set-key (kbd "M-N") 'move-line-down)
-
-;; C-z を無効化
-(global-unset-key "\C-z")
-(global-set-key "\C-z" nil)
-
-;; タイトルバーにファイルのフルパス表示
-(setq frame-title-format
-      (format "%%b - %%f"))
+  :bind (("M-P" . move-line-up)
+         ("M-N" . move-line-down)))
 
 ;; whitespace
 ;; 空白関係を可視化させる
-(require 'whitespace)
-(setq whitespace-style '(face           ; faceで可視化
-                         trailing       ; 行末
-                         tabs           ; タブ
-                         empty          ; 先頭/末尾の空行
-                         space-mark     ; 表示のマッピング
-                         tab-mark
-                         ))
-
-(setq whitespace-display-mappings
-      '((tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
-
-(global-whitespace-mode 1)
-
-(defvar my/bg-color "#333333")
-(set-face-attribute 'whitespace-trailing nil
-                    :background my/bg-color
-                    :foreground "DeepPink"
-                    :underline t)
-(set-face-attribute 'whitespace-tab nil
-                    :background my/bg-color
-                    :foreground "gray36"
-                    :underline t)
-(set-face-attribute 'whitespace-space nil
-                    :background my/bg-color
-                    :foreground "GreenYellow"
-                    :weight 'bold)
-(set-face-attribute 'whitespace-empty nil
-                    :background my/bg-color)
+(leaf whitespace-color
+  :require whitespace
+  :setq ((whitespace-style quote
+                           (
+                            face                   ; faceで可視化
+                            trailing             ; 行末
+                            tabs                   ; タブ
+                            empty               ; 先頭/末尾の空行
+                            space-mark     ; 表示のマッピング
+                            tab-mark
+                            ))
+         (whitespace-display-mappings quote
+                                      ((tab-mark 9
+                                                 [187 9]
+                                                 [92 9])))
+         (my/bg-color . "#333333"))
+  :config
+  (global-whitespace-mode 1)
+  (set-face-attribute 'whitespace-trailing nil :background my/bg-color :foreground "DeepPink" :underline t)
+  (set-face-attribute 'whitespace-tab nil :background my/bg-color :foreground "gray36" :underline t)
+  (set-face-attribute 'whitespace-space nil :background my/bg-color :foreground "GreenYellow" :weight 'bold)
+  (set-face-attribute 'whitespace-empty nil :background my/bg-color))
 
 ;; M-backspace で kill-ring に追加しない
-(defun delete-word (arg)
-  "Delete characters forward until encountering the end of a word.
-With argument, do this that many times."
-  (interactive "p")
-  (delete-region (point) (progn (forward-word arg) (point))))
+(leaf M-BS-kill-ring
+  :preface
+  (defun delete-word (arg)
+    "Delete characters forward until encountering the end of a word.\nWith argument, do this that many times."
+    (interactive "p")
+    (delete-region
+     (point)
+     (progn
+       (forward-word arg)
+       (point))))
 
-(defun backward-delete-word (arg)
-  "Delete characters backward until encountering the end of a word.
-With argument, do this that many times."
-  (interactive "p")
-  (delete-word (- arg)))
+  (defun backward-delete-word (arg)
+    "Delete characters backward until encountering the end of a word.\nWith argument, do this that many times."
+    (interactive "p")
+    (delete-word
+     (- arg)))
 
-(global-set-key (read-kbd-macro "<M-DEL>") 'backward-delete-word)
+  (defun align-regexp-repeated (start stop regexp)
+    "Like align-regexp, but repeated for multiple columns. See http://www.emacswiki.org/emacs/AlignCommands"
+    (interactive "r\nsAlign regexp: ")
+    (let ((spacing 1)
+          (old-buffer-size (buffer-size)))
+      ;; If our align regexp is just spaces, then we don't need any
+      ;; extra spacing.
+      (when (string-match regexp " ")
+        (setq spacing 0))
+      (align-regexp start stop
+                    ;; add space at beginning of regexp
+                    (concat "\\([[:space:]]*\\)" regexp)
+                    1 spacing t)
+      ;; modify stop because align-regexp will add/remove characters
+      (align-regexp start
+                    (+ stop
+                       (-
+                        (buffer-size)
+                        old-buffer-size))
+                    ;; add space at end of regexp
+                    (concat regexp "\\([[:space:]]*\\)")
+                    1 spacing t)))
 
-(defun align-regexp-repeated (start stop regexp)
-  "Like align-regexp, but repeated for multiple columns. See http://www.emacswiki.org/emacs/AlignCommands"
-  (interactive "r\nsAlign regexp: ")
-  (let ((spacing 1)
-        (old-buffer-size (buffer-size)))
-    ;; If our align regexp is just spaces, then we don't need any
-    ;; extra spacing.
-    (when (string-match regexp " ")
-      (setq spacing 0))
-    (align-regexp start stop
-                  ;; add space at beginning of regexp
-                  (concat "\\([[:space:]]*\\)" regexp)
-                  1 spacing t)
-    ;; modify stop because align-regexp will add/remove characters
-    (align-regexp start (+ stop (- (buffer-size) old-buffer-size))
-                  ;; add space at end of regexp
-                  (concat regexp "\\([[:space:]]*\\)")
-                  1 spacing t)))
-
-;; mini buffer に改行コードを表示する
-(setq eol-mnemonic-dos "(CRLF)")
-(setq eol-mnemonic-mac "(CR)")
-(setq eol-mnemonic-unix "(LF)")
-
-;; for json format
-(defun format-json (beg end)
-  (interactive "r")
-  (shell-command-on-region beg end "jq ." nil t))
-
+  :config
+  (global-set-key
+   (read-kbd-macro "<M-DEL>")
+   'backward-delete-word))
 
 ;;  ---------------
 ;; |    package    |
