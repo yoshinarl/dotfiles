@@ -522,11 +522,6 @@
 (helm-mode 1)
 (define-key global-map (kbd "C-x C-h") 'helm-mini)
 
-;; rbenv-mode
-(require 'rbenv)
-(global-rbenv-mode)
-(setq rbenv-installation-dir "/usr/local/Cellar/rbenv")
-
 ;; enh-ruby-mode
 (leaf enh-ruby-mode
   :doc "Major mode for editing Ruby files"
@@ -586,30 +581,6 @@
 ;; (require 'rubocop)
 ;; (add-hook 'enh-ruby-mode-hook 'rubocop-mode)
 
-;; js2-mode
-(require 'js2-mode)
-(autoload 'js2-mode "js2-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode))
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . js2-jsx-mode))
-(add-hook 'js2-jsx-mode-hook 'emmet-mode)
-(setq-default js2-basic-offset 2)
-
-;; typescript-mode
-(require 'typescript-mode)
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
-(add-hook 'typescript-mode-hook
-  '(lambda ()
-     (setq typescript-indent-level 2)))
-
-;; haml-mode
-(require 'haml-mode)
-(add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
-(add-hook 'haml-mode-hook
-  (lambda ()
-    (define-key haml-mode-map "\C-m" 'newline-and-indent)))
-
 ;; C−x C-f C-rで開くファイルを履歴からインクリメンタルサーチする。
 (leaf minibuf-isearch
   :doc "incremental search on minibuffer history"
@@ -627,24 +598,6 @@
   :hook ((after-init-hook . session-initialize))
   :require session)
 
-;; hiwin-mode
-;; 非アクティブのバッファの色を変える
-;; (require 'hiwin)
-;; (hiwin-activate)
-;; (set-face-background 'hiwin-face "#666666")
-
-;; emmet-mode
-(require 'emmet-mode)
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; マークアップ言語全部で使う
-(setq emmet-expand-jsx-className? t) ;; jsx で使う
-(setq emmet-expand-tsx-className? t) ;; tsx で使う
-(eval-after-load "emmet-mode"
-  '(define-key emmet-mode-keymap (kbd "C-j") nil)) ;; C-j は newline のままにしておく
-(keyboard-translate ?\C-i ?\H-i) ;;C-i と Tabの被りを回避
-(define-key emmet-mode-keymap (kbd "H-i") 'emmet-expand-line) ;; C-i で展開
-(add-hook 'emmet-mode-hook (lambda () (setq emmet-indent-after-insert nil)))
-(add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2))) ;; indent 2 spaces.
-(setq emmet-move-cursor-between-quotes t) ;; default nil
 ;; git-gutter-fringe+
 (leaf git-gutter-fringe+
   :doc "Fringe version of git-gutter+.el"
@@ -696,10 +649,6 @@
   ;; プレフィクスキーはC-z
   (setq elscreen-prefix-key (kbd "C-z"))
   (elscreen-start))
-
-;; lsp-mode
-(require 'lsp-mode)
-(add-hook 'web-mode-hook #'lsp)
 
 ;; protobuf-mode
 (leaf protobuf-mode
