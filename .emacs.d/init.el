@@ -470,28 +470,52 @@
 ;;  ---------------
 
 ;; 行番号を表示
-(require 'linum)
-(global-linum-mode t)
-(setq linum-format "%5d")
+(leaf linum
+  :doc "display line numbers in the left margin"
+  :tag "builtin"
+  :added "2023-06-26"
+  :require linum
+  :setq ((linum-format . "%5d"))
+  :config
+  (global-linum-mode t))
 
 ;; auto-complete-mode
-(defun load-auto-complete ()
-  (require 'auto-complete)
-  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-  (ac-config-default)
-  (add-to-list 'ac-modes 'text-mode)
-  (add-to-list 'ac-modes 'enh-ruby-mode)
-  (setq ac-use-menu-map t)
-  (setq ac-use-fuzzy t))
+(leaf auto-complete
+  :doc "Auto Completion for GNU Emacs"
+  :req "popup-0.5.0" "cl-lib-0.5"
+  :tag "convenience" "completion"
+  :url "https://github.com/auto-complete/auto-complete"
+  :added "2023-06-26"
+  :ensure t
+  :preface
+  (defun load-auto-complete nil
+    (require 'auto-complete)
+    (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+    (ac-config-default)
+    (add-to-list 'ac-modes 'text-mode)
+    (add-to-list 'ac-modes 'enh-ruby-mode)
+    (setq ac-use-menu-map t)
+    (setq ac-use-fuzzy t)))
 
 ;; flycheck
-(require 'flycheck)
-(setq flycheck-check-syntax-automatically '(mode-enabled save))
-(add-hook 'after-init-hook #'global-flycheck-mode)
-(add-hook 'enh-ruby-mode-hook 'flycheck-mode)
-(eval-after-load 'flycheck
-  '(custom-set-variables
-    '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))))
+(leaf flycheck
+  :doc "On-the-fly syntax checking"
+  :req "emacs-25.1" "dash-2.12.1" "pkg-info-0.4" "let-alist-1.0.4" "seq-1.11"
+  :tag "tools" "languages" "convenience" "emacs>=25.1"
+  :url "http://www.flycheck.org"
+  :added "2023-06-28"
+  :emacs>= 25.1
+  :ensure t
+  :hook ((after-init-hook . global-flycheck-mode)
+         (enh-ruby-mode-hook . flycheck-mode))
+  :require flycheck
+  :setq ((flycheck-check-syntax-automatically quote
+                                              (mode-enabled save)))
+  :config
+  (with-eval-after-load 'flycheck
+    (custom-set-variables
+     '(flycheck-disabled-checkers
+       '(javascript-jshint javascript-jscs)))))
 
 ;; helm
 (require 'helm-config)
@@ -504,35 +528,59 @@
 (setq rbenv-installation-dir "/usr/local/Cellar/rbenv")
 
 ;; enh-ruby-mode
-(require 'enh-ruby-mode)
-(autoload 'enh-ruby-mode "enh-ruby-mode"
-  "Mode for editing ruby source files" t)
-(add-to-list 'auto-mode-alist
-             '("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
-(add-to-list 'interpreter-mode-alist '("ruby" . enh-ruby-mode))
+(leaf enh-ruby-mode
+  :doc "Major mode for editing Ruby files"
+  :req "emacs-25.1"
+  :tag "ruby" "elisp" "languages" "emacs>=25.1"
+  :url "https://github.com/zenspider/Enhanced-Ruby-Mode"
+  :added "2023-06-28"
+  :emacs>= 25.1
+  :ensure t
+  :mode (("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
+  :interpreter (("ruby" . enh-ruby-mode))
+  :require enh-ruby-mode)
 
 ;; "encoding を自動挿入しない"
-(defun remove-enh-magic-comment ()
-  (remove-hook 'before-save-hook 'enh-ruby-mode-set-encoding t))
-(add-hook 'enh-ruby-mode-hook 'remove-enh-magic-comment)
-(setq ruby-insert-encoding-magic-comment nil)
-(add-hook 'enh-ruby-mode-hook
-  '(lambda ()
-    (setq ruby-indent-level tab-width)
-    (setq enh-ruby-deep-indent-paren nil)
-    (define-key ruby-mode-map [return] 'ruby-reindent-then-newline-and-indent))
-    (load-auto-complete)
-    (setenv "LC_ALL" "ja_JP.UTF-8"))
+(leaf remove-enh-magic-comment
+  :preface
+  (defun remove-enh-magic-comment nil
+    (remove-hook 'before-save-hook 'enh-ruby-mode-set-encoding t))
+
+  :hook ((enh-ruby-mode-hook . remove-enh-magic-comment))
+  :setq ((ruby-insert-encoding-magic-comment))
+  :config
+  (add-hook 'enh-ruby-mode-hook
+            '(lambda nil
+               (setq ruby-indent-level tab-width)
+               (setq enh-ruby-deep-indent-paren nil)
+               (define-key ruby-mode-map
+                 [return]
+                 'ruby-reindent-then-newline-and-indent))
+            (load-auto-complete)
+            (setenv "LC_ALL" "ja_JP.UTF-8")))
 
 ;; ruby-electric
-(require 'ruby-electric)
-(add-hook 'enh-ruby-mode-hook '(lambda () (ruby-electric-mode t)))
-(setq ruby-electric-expand-delimiters-list nil)
+(leaf ruby-electric
+  :doc "Minor mode for electrically editing ruby code"
+  :tag "ruby" "languages"
+  :url "https://github.com/ruby/elisp-ruby-electric"
+  :added "2023-06-28"
+  :ensure t
+  :require ruby-electric
+  :setq ((ruby-electric-expand-delimiters-list))
+  :config
+  (add-hook 'enh-ruby-mode-hook
+            '(lambda nil
+               (ruby-electric-mode t))))
 
 ;; ruby-block
-(require 'ruby-block)
-(ruby-block-mode t)
-(setq ruby-block-highlight-toggle t)
+(leaf ruby-clock
+  :added "2023-06-28"
+  :el-get h3poteto/ruby-block.el
+  :require ruby-block
+  :setq ((ruby-block-highlight-toggle . t))
+  :config
+  (ruby-block-mode t))
 
 ;; rubocop
 ;; (require 'rubocop)
@@ -563,13 +611,21 @@
     (define-key haml-mode-map "\C-m" 'newline-and-indent)))
 
 ;; C−x C-f C-rで開くファイルを履歴からインクリメンタルサーチする。
-(require 'minibuf-isearch)
-(require 'session)
-(add-hook 'after-init-hook 'session-initialize)
+(leaf minibuf-isearch
+  :doc "incremental search on minibuffer history"
+  :tag "incremental search" "history" "minibuffer"
+  :added "2023-06-28"
+  :ensure t
+  :require minibuf-isearch)
 
-;; git-gutter-fringe+
-(require 'git-gutter-fringe+)
-(global-git-gutter+-mode t)
+(leaf session
+  :doc "use variables, registers and buffer places across sessions"
+  :tag "tools" "data" "desktop" "session management" "session"
+  :url "http://emacs-session.sourceforge.net/"
+  :added "2023-06-28"
+  :ensure t
+  :hook ((after-init-hook . session-initialize))
+  :require session)
 
 ;; hiwin-mode
 ;; 非アクティブのバッファの色を変える
@@ -589,75 +645,94 @@
 (add-hook 'emmet-mode-hook (lambda () (setq emmet-indent-after-insert nil)))
 (add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2))) ;; indent 2 spaces.
 (setq emmet-move-cursor-between-quotes t) ;; default nil
+;; git-gutter-fringe+
+(leaf git-gutter-fringe+
+  :doc "Fringe version of git-gutter+.el"
+  :req "git-gutter+-0.1" "fringe-helper-1.0.1"
+  :url "https://github.com/nonsequitur/git-gutter-fringe-plus"
+  :added "2023-06-28"
+  :ensure t
+  :require git-gutter-fringe+
+  :config
+  (global-git-gutter+-mode t))
 
 ;; elscreen
-(require 'elscreen)
-;;; プレフィクスキーはC-z
-(setq elscreen-prefix-key (kbd "C-z"))
-(elscreen-start)
-;;; タブの先頭に[X]を表示しない
-(setq elscreen-tab-display-kill-screen nil)
-;;; header-lineの先頭に[<->]を表示しない
-(setq elscreen-tab-display-control nil)
-;;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
-(setq elscreen-buffer-to-nickname-alist
-      '(("^dired-mode$" .
-         (lambda ()
-           (format "Dired(%s)" dired-directory)))
-        ("^Info-mode$" .
-         (lambda ()
-           (format "Info(%s)" (file-name-nondirectory Info-current-file))))
-        ("^mew-draft-mode$" .
-         (lambda ()
-           (format "Mew(%s)" (buffer-name (current-buffer)))))
-        ("^mew-" . "Mew")
-        ("^irchat-" . "IRChat")
-        ("^liece-" . "Liece")
-        ("^lookup-" . "Lookup")))
-(setq elscreen-mode-to-nickname-alist
-      '(("[Ss]hell" . "shell")
-        ("compilation" . "compile")
-        ("-telnet" . "telnet")
-        ("dict" . "OnlineDict")
-        ("*WL:Message*" . "Wanderlust")))
-
-;; web-mode
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[jt]sx\\'" . web-mode))
-(add-hook 'web-mode-hook 'emmet-mode)
-(add-hook 'web-mode-hook
-          '(lambda ()
-             (setq web-mode-attr-indent-offset nil)
-             (setq web-mode-markup-indent-offset 2)
-             (setq web-mode-css-indent-offset 2)
-             (setq web-mode-code-indent-offset 2)
-             (setq web-mode-sql-indent-offset 2)
-             (setq indent-tabs-mode nil)
-             (setq tab-width 2)))
-
-;; rufo.el
-(require 'rufo)
-(add-hook 'enh-ruby-mode-hook 'rufo-minor-mode)
-(setq rufo-minor-mode-use-bundler t)
-
-;; protobuf-mode
-(require 'protobuf-mode)
-(setq auto-mode-alist (append '(("\\.proto$" . protobuf-mode)) auto-mode-alist))
-(defconst my-protobuf-style
-  '((c-basic-offset . 4)
-    (indent-tabs-mode . nil)))
-(add-hook 'protobuf-mode-hook
-  (lambda () (c-add-style "my-style" my-protobuf-style t)))
+(leaf elscreen
+  :doc "Emacs window session manager"
+  :req "emacs-24"
+  :tag "convenience" "window" "emacs>=24"
+  :url "https://github.com/knu/elscreen"
+  :added "2023-06-28"
+  :emacs>= 24
+  :ensure t
+  :require elscreen
+  :setq (
+         ;; タブの先頭に[X]を表示しない
+         (elscreen-tab-display-kill-screen)
+         ;; header-lineの先頭に[<->]を表示しない
+         (elscreen-tab-display-control)
+         ;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
+         (elscreen-buffer-to-nickname-alist quote
+                                            (("^dired-mode$" lambda nil
+                                              (format "Dired(%s)" dired-directory))
+                                             ("^Info-mode$" lambda nil
+                                              (format "Info(%s)"
+                                                      (file-name-nondirectory Info-current-file)))
+                                             ("^mew-draft-mode$" lambda nil
+                                              (format "Mew(%s)"
+                                                      (buffer-name
+                                                       (current-buffer))))
+                                             ("^mew-" . "Mew")
+                                             ("^irchat-" . "IRChat")
+                                             ("^liece-" . "Liece")
+                                             ("^lookup-" . "Lookup")))
+         (elscreen-mode-to-nickname-alist quote
+                                          (("[Ss]hell" . "shell")
+                                           ("compilation" . "compile")
+                                           ("-telnet" . "telnet")
+                                           ("dict" . "OnlineDict")
+                                           ("*WL:Message*" . "Wanderlust"))))
+  :config
+  ;; プレフィクスキーはC-z
+  (setq elscreen-prefix-key (kbd "C-z"))
+  (elscreen-start))
 
 ;; lsp-mode
 (require 'lsp-mode)
 (add-hook 'web-mode-hook #'lsp)
 
+;; protobuf-mode
+(leaf protobuf-mode
+  :doc "major mode for editing protocol buffers."
+  :tag "languages" "protobuf" "google"
+  :added "2023-06-28"
+  :ensure t
+  :require protobuf-mode
+  :config
+  (setq auto-mode-alist (append
+                         '(("\\.proto$" . protobuf-mode))
+                         auto-mode-alist))
+  (defconst my-protobuf-style
+    '((c-basic-offset . 4)
+      (indent-tabs-mode)))
+  (add-hook 'protobuf-mode-hook
+            (lambda nil
+              (c-add-style "my-style" my-protobuf-style t))))
+
 ;; exec-path-from-shell
-(setq exec-path-from-shell-shell-name "zsh")
-(exec-path-from-shell-initialize)
-(exec-path-from-shell-copy-envs '("PATH" "GOPATH" "LANG"))
+(leaf exec-path-from-shell
+  :doc "Get environment variables such as $PATH from the shell"
+  :req "emacs-24.1" "cl-lib-0.6"
+  :tag "environment" "unix" "emacs>=24.1"
+  :url "https://github.com/purcell/exec-path-from-shell"
+  :added "2023-06-28"
+  :emacs>= 24.1
+  :ensure t
+  :setq ((exec-path-from-shell-shell-name . "zsh"))
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-envs
+   '("PATH" "GOPATH" "LANG")))
 
 (provide 'init)
 
