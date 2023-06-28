@@ -51,7 +51,7 @@ alias g="git"
 alias ll="ls -lG"
 alias ls="ls -G"
 alias mv="mv -i"
-alias rm="rmtrash"
+alias rm='trash -F'
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
