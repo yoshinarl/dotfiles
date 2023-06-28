@@ -57,10 +57,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 export PATH=/usr/local/bin:$PATH
 
-# anyenv
-export PATH="${HOME}/.anyenv/bin:$PATH"
-eval "$(anyenv init -)"
-
 # git color
 autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
 
@@ -115,3 +111,7 @@ export YVM_DIR=/usr/local/opt/yvm
 
 export PATH="/usr/local/sbin:$PATH"
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# anyenv
+export PATH="${HOME}/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
