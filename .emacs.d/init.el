@@ -194,13 +194,13 @@
                              initial-frame-alist)))
 
 ;; 括弧の自動補完
-(leaf skelton-pair
-  :bind (("(" . skeleton-pair-insert-maybe)
-         ("{" . skeleton-pair-insert-maybe)
-         ("[" . skeleton-pair-insert-maybe)
-         ("\"" . skeleton-pair-insert-maybe)
-         ("'" . skeleton-pair-insert-maybe))
-  :setq ((skeleton-pair . 1)))
+;; leaf-convert-region するとなぜかうごかない
+(setq skeleton-pair t)
+(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "`") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
 
 ;; フォント変更->Ricty
 (leaf font
