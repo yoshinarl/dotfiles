@@ -592,6 +592,17 @@
          ("C-x b" . consult-buffer))
   )
 
+;; recentf
+(leaf recentf
+  :doc "setup a menu of recently opened files"
+  :tag "builtin"
+  :added "2023-07-01"
+  :ensure t
+  :init
+  (recentf-mode)
+  :custom ((recentf-max-saved-items . 2000)
+           (recentf-auto-cleanup    . 'never)))
+
 ;; enh-ruby-mode
 (leaf enh-ruby-mode
   :doc "Major mode for editing Ruby files"
