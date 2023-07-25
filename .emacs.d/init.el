@@ -517,6 +517,22 @@
      '(flycheck-disabled-checkers
        '(javascript-jshint javascript-jscs)))))
 
+;; vertico
+(leaf vertico
+  :doc "VERTical Interactive COmpletion"
+  :req "emacs-27.1" "compat-29.1.4.0"
+  :tag "completion" "matching" "files" "convenience" "emacs>=27.1"
+  :url "https://github.com/minad/vertico"
+  :added "2023-07-01"
+  :emacs>= 27.1
+  :ensure t
+  :init
+  (vertico-mode)
+  :setq ((vertico-cycle . t))
+  :bind ((vertico-map
+          ("C-r" . vertico-previous))
+         (vertico-map
+          ("C-s" . vertico-next))))
 
 ;; enh-ruby-mode
 (leaf enh-ruby-mode
