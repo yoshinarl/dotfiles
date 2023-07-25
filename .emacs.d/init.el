@@ -534,6 +534,15 @@
          (vertico-map
           ("C-s" . vertico-next))))
 
+;; savehist
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(leaf savehist
+  :doc "Save minibuffer history"
+  :tag "builtin"
+  :added "2023-07-01"
+  :init
+  (savehist-mode))
+
 ;; enh-ruby-mode
 (leaf enh-ruby-mode
   :doc "Major mode for editing Ruby files"
