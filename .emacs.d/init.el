@@ -517,10 +517,6 @@
      '(flycheck-disabled-checkers
        '(javascript-jshint javascript-jscs)))))
 
-;; helm
-(require 'helm-config)
-(helm-mode 1)
-(define-key global-map (kbd "C-x C-h") 'helm-mini)
 
 ;; enh-ruby-mode
 (leaf enh-ruby-mode
