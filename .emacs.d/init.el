@@ -557,6 +557,28 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
+(leaf marginalia
+  :doc "Enrich existing commands with completion annotations"
+  :req "emacs-27.1" "compat-29.1.4.0"
+  :tag "completion" "matching" "help" "docs" "emacs>=27.1"
+  :url "https://github.com/minad/marginalia"
+  :added "2023-07-03"
+  :emacs>= 27.1
+  :ensure t
+  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+  ;; available in the *Completions* buffer, add it to the
+  ;; `completion-list-mode-map'.
+  ;;:bind (:map minibuffer-local-map
+  ;;            ("M-A" . marginalia-cycle))
+
+  ;; The :init section is always executed.
+  :init
+
+  ;; Marginalia must be actived in the :init section of use-package such that
+  ;; the mode gets enabled right away. Note that this forces loading the
+  ;; package.
+  (marginalia-mode))
+
 ;; enh-ruby-mode
 (leaf enh-ruby-mode
   :doc "Major mode for editing Ruby files"
