@@ -579,6 +579,19 @@
   ;; package.
   (marginalia-mode))
 
+;; consult
+(leaf consult
+  :doc "Consulting completing-read"
+  :req "emacs-27.1" "compat-29.1.4.1"
+  :tag "completion" "files" "matching" "emacs>=27.1"
+  :url "https://github.com/minad/consult"
+  :added "2023-07-01"
+  :emacs>= 27.1
+  :ensure t
+  :bind (("C-s" . consult-line)
+         ("C-x b" . consult-buffer))
+  )
+
 ;; enh-ruby-mode
 (leaf enh-ruby-mode
   :doc "Major mode for editing Ruby files"
