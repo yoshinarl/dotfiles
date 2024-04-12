@@ -202,12 +202,12 @@
 (global-set-key (kbd "`") 'skeleton-pair-insert-maybe)
 (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
 
-;; フォント変更->Ricty
+;; フォント変更->HackGen Console NF
 (leaf font
   :config
-  (let* ((size 13)
-         (asciifont "Ricty")
-         (jpfont "Ricty")
+  (let* ((size 12)
+         (asciifont "HackGen Console NF")
+         (jpfont "HackGen Console NF")
          (h (* size 11))
          (fontspec (font-spec :family asciifont))
          (jp-fontspec (font-spec :family jpfont)))
