@@ -110,12 +110,26 @@ export YVM_DIR=/usr/local/opt/yvm
 [ -r $YVM_DIR/yvm.sh ] && . $YVM_DIR/yvm.sh
 
 export PATH="/usr/local/sbin:$PATH"
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # anyenv
-export PATH="${HOME}/.anyenv/bin:$PATH"
-eval "$(anyenv init -)"
+if [ -e "$HOME/.anyenv" ]
+then
+  export PATH="${HOME}/.anyenv/bin:$PATH"
+  if command -v anyenv 1>/dev/null 2>&1
+  then
+    eval "$(anyenv init -)"
+  fi
+fi
 
 # NRFSDK v12.3.0 用パス
 # https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download から DL されていること
 export NRFSDK12_ROOT=~/Workspace/nRF5_SDK_12.3.0_d7731ad
+
+if uname -a | grep -sq "Ubuntu"; then
+  # Ubuntu
+elif [ "$(uname)" = "Darwin" ]; then
+  # macOS
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -n "$WSL_DISTRO_NAME" ]; then
+  # WSL2
+fi
