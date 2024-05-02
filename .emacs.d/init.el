@@ -749,6 +749,15 @@
             (lambda nil
               (c-add-style "my-style" my-protobuf-style t))))
 
+;; markdown-mode
+(leaf markdown-mode :ensure t
+  :mode ("\\.md\\'" . gfm-mode)
+  :config
+  (setopt markdown-command '("pandoc" "--from=markdown" "--to=html5"))
+  (setopt markdown-fontify-code-blocks-natively t)
+  (setopt markdown-header-scaling t)
+  (setopt markdown-indent-on-enter 'indent-and-new-item))
+
 ;; exec-path-from-shell
 (leaf exec-path-from-shell
   :doc "Get environment variables such as $PATH from the shell"
