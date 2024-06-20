@@ -180,19 +180,6 @@
                  ;; タブを使わずスペースにする
                  (indent-tabs-mode)))
 
-;; 起動時のサイズ、表示位置、フォントを設定
-(leaf default-frame
-  :setq ((default-frame-alist . initial-frame-alist))
-  :config
-  (setq initial-frame-alist (append
-                             (list
-                              '(width . 175)
-                              '(height . 110)
-                              '(top . 0)
-                              '(left . 0)
-                              '(right . 0))
-                             initial-frame-alist)))
-
 ;; 括弧の自動補完
 ;; leaf-convert-region するとなぜかうごかない
 (setq skeleton-pair t)
@@ -321,7 +308,7 @@
       (scroll-up 2))))
 
 ;; 各種色設定
-(leaf color
+(leaf default-frame-alist
   :when window-system
   :config
   ;; 文字の色を設定します。
