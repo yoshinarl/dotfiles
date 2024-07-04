@@ -3,6 +3,7 @@
 [core]
     excludesfile = ~/.gitignore
     edirot = "vim"
+    quotepath = false
 [alias]
     st = status
     co = checkout
