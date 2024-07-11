@@ -100,6 +100,12 @@
 ;;   (Add-to-list 'exec-path
 ;;                (expand-file-name "/usr/local/bin")))
 
+;; バックアップファイルを作らない
+(setq make-backup-files nil)
+
+;; タイトルバーにファイルのフルパス表示
+(setq frame-title-format (format "%%b - %%f"))
+
 (leaf general
   :bind (
          ;; Returnでオートインデント
@@ -112,8 +118,6 @@
          ;; 保存時に行末の空白を削除
          (before-save-hook . delete-trailing-whitespace))
   :setq (
-         ;; バックアップファイルを作らない
-         (backup-inhibited . t)
          ;; 終了時にオートセーブファイルを消す
          (delete-auto-save-files . t)
          ;; optionキーをMetaキーとして利用
@@ -139,9 +143,7 @@
   ;; 選択範囲をハイライト表示
   (transient-mark-mode t)
   ;; ファイルに変更があったら自動で再読み込みする
-  (global-auto-revert-mode 1)
-  ;; タイトルバーにファイルのフルパス表示
-  (setq frame-title-format (format "%%b - %%f")))
+  (global-auto-revert-mode 1))
 
 ;; 音を出さない
 (leaf ignore-ring-bell
