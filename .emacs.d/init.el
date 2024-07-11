@@ -743,7 +743,8 @@
   (setopt markdown-command '("pandoc" "--from=markdown" "--to=html5"))
   (setopt markdown-fontify-code-blocks-natively t)
   (setopt markdown-header-scaling t)
-  (setopt markdown-indent-on-enter 'indent-and-new-item))
+  (setopt markdown-indent-on-enter 'indent-and-new-item)
+  (setopt markdown-list-indent-width 2))
 
 ;; exec-path-from-shell
 (leaf exec-path-from-shell
