@@ -113,7 +113,9 @@
          ;; C-hをBSに
          ("" . backward-delete-char)
          ;; C-x C-gでM-x goto-line
-         ("" . goto-line))
+         ("" . goto-line)
+         ;; C-z を無効化
+         (""))
   :hook (
          ;; 保存時に行末の空白を削除
          (before-save-hook . delete-trailing-whitespace))
@@ -134,9 +136,6 @@
          (eol-mnemonic-dos . "(CRLF)")
          (eol-mnemonic-mac . "(CR)")
          (eol-mnemonic-unix . "(LF)"))
-  :bind(
-        ;; C-z を無効化
-        (""))
   :config
   ;; 対応する括弧を光らせる
   (show-paren-mode 1)
