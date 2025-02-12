@@ -100,6 +100,12 @@
 ;;   (Add-to-list 'exec-path
 ;;                (expand-file-name "/usr/local/bin")))
 
+;; バックアップファイルを作らない
+(setq make-backup-files nil)
+
+;; タイトルバーにファイルのフルパス表示
+(setq frame-title-format (format "%%b - %%f"))
+
 (leaf general
   :bind (
          ;; Returnでオートインデント
@@ -107,13 +113,13 @@
          ;; C-hをBSに
          ("" . backward-delete-char)
          ;; C-x C-gでM-x goto-line
-         ("" . goto-line))
+         ("" . goto-line)
+         ;; C-z を無効化
+         (""))
   :hook (
          ;; 保存時に行末の空白を削除
          (before-save-hook . delete-trailing-whitespace))
   :setq (
-         ;; バックアップファイルを作らない
-         (backup-inhibited . t)
          ;; 終了時にオートセーブファイルを消す
          (delete-auto-save-files . t)
          ;; optionキーをMetaキーとして利用
@@ -130,18 +136,13 @@
          (eol-mnemonic-dos . "(CRLF)")
          (eol-mnemonic-mac . "(CR)")
          (eol-mnemonic-unix . "(LF)"))
-  :bind(
-        ;; C-z を無効化
-        (""))
   :config
   ;; 対応する括弧を光らせる
   (show-paren-mode 1)
   ;; 選択範囲をハイライト表示
   (transient-mark-mode t)
   ;; ファイルに変更があったら自動で再読み込みする
-  (global-auto-revert-mode 1)
-  ;; タイトルバーにファイルのフルパス表示
-  (setq frame-title-format (format "%%b - %%f")))
+  (global-auto-revert-mode 1))
 
 ;; 音を出さない
 (leaf ignore-ring-bell
@@ -743,7 +744,8 @@
   (setopt markdown-command '("pandoc" "--from=markdown" "--to=html5"))
   (setopt markdown-fontify-code-blocks-natively t)
   (setopt markdown-header-scaling t)
-  (setopt markdown-indent-on-enter 'indent-and-new-item))
+  (setopt markdown-indent-on-enter 'indent-and-new-item)
+  (setopt markdown-list-indent-width 2))
 
 ;; exec-path-from-shell
 (leaf exec-path-from-shell
