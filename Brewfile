@@ -74,6 +74,7 @@ brew "sanemat/font/ricty"
 brew "songmu/tap/blogsync"
 cask "adobe-creative-cloud"
 cask "alfred"
+cask "alt-tab"
 cask "appcleaner"
 cask "aquaskk"
 cask "aws-vpn-client"
@@ -87,7 +88,6 @@ cask "finicky"
 cask "font-hackgen-nerd"
 cask "google-cloud-sdk"
 cask "google-drive"
-cask "hyperswitch"
 cask "iterm2"
 cask "kap"
 cask "karabiner-elements"
@@ -106,6 +106,7 @@ mas "Display Menu", id: 549083868
 mas "GarageBand", id: 682658836
 mas "iMovie", id: 408981434
 mas "Skitch", id: 425955336
+mas "ToyViewer", id: 414298354
 mas "TweetDeck", id: 485812721
 vscode "github.copilot"
 vscode "github.copilot-chat"
