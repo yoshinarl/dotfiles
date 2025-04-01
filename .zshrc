@@ -121,6 +121,12 @@ then
   fi
 fi
 
+# mise
+if [ -e "$HOME/.local/bin/mise" ]
+then
+    eval "$($HOME/.local/bin/mise activate zsh)"
+fi
+
 # NRFSDK v12.3.0 用パス
 # https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download から DL されていること
 export NRFSDK12_ROOT=~/Workspace/nRF5_SDK_12.3.0_d7731ad
