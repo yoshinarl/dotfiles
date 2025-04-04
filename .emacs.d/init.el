@@ -745,6 +745,24 @@
   (exec-path-from-shell-copy-envs
    '("PATH" "GOPATH" "LANG")))
 
+(leaf corfu
+  :doc "COmpletion in Region FUnction"
+  :req "emacs-27.1" "compat-29.1.4.4"
+  :tag "text" "completion" "matching" "convenience" "abbrev" "emacs>=27.1"
+  :url "https://github.com/minad/corfu"
+  :added "2025-04-05"
+  :emacs>= 27.1
+  :ensure t
+  :custom ((corfu-auto . t)
+           (corfu-auto-delay . 0)
+           (corfu-auto-prefix . 1)
+           (corfu-cycle . t)
+           (corfu-quit-no-match . nil)
+           (tab-always-indent . 'complete))
+  :init
+  (global-corfu-mode)
+  )
+
 (provide 'init)
 
 (custom-set-variables
