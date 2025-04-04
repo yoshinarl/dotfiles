@@ -2,7 +2,6 @@
 .\#*
 *~
 /.emacs.d/.session
-/.emacs.d/ac-comphist.dat
 /.emacs.d/auto-save-list/
 /.emacs.d/elpa/
 /.emacs.d/projectile-bookmarks.eld
