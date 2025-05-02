@@ -763,6 +763,12 @@
   (global-corfu-mode)
   )
 
+(leaf codeium
+  :tag "out-of-MELPA"
+  :added "2025-05-02"
+  :el-get "Exafunction/codeium.el"
+  :require t)
+
 (provide 'init)
 
 (custom-set-variables
