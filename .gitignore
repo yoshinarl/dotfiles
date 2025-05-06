@@ -13,6 +13,7 @@
 /.emacs.d/el-get/
 /.emacs.d/history
 /.emacs.d/eln-cache/
+/.emacs.d/codeium/
 
 # Mac
 .DS_Store
