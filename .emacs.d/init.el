@@ -754,10 +754,10 @@
   :emacs>= 27.1
   :ensure t
   :custom ((corfu-auto . t)
-           (corfu-auto-delay . 0)
-           (corfu-auto-prefix . 1)
+           (corfu-preview-current . t)
            (corfu-cycle . t)
            (corfu-quit-no-match . nil)
+           (corfu-preselect . 'prompt)
            (tab-always-indent . 'complete))
   :init
   (global-corfu-mode)
