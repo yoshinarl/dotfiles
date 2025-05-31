@@ -20,4 +20,19 @@ wezterm.font_with_fallback({
   "HackGen Console NF"
 })
 
+config.keys = {
+  -- +D で横分割
+  {
+    key = "D",
+    mods = "ALT",
+    action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" },
+  },
+  -- Cmd+Shift+D で縦分割
+  {
+    key = "D",
+    mods = "ALT|SHIFT",
+    action = wezterm.action.SplitVertical { domain = "CurrentPaneDomain" },
+  },
+}
+
 return config
