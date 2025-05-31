@@ -467,23 +467,6 @@
   :config
   (global-linum-mode t))
 
-;; auto-complete-mode
-(leaf auto-complete
-  :doc "Auto Completion for GNU Emacs"
-  :req "popup-0.5.0" "cl-lib-0.5"
-  :tag "convenience" "completion"
-  :url "https://github.com/auto-complete/auto-complete"
-  :added "2023-06-26"
-  :ensure t
-  :preface
-  (defun load-auto-complete nil
-    (require 'auto-complete)
-    (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-    (ac-config-default)
-    (add-to-list 'ac-modes 'text-mode)
-    (add-to-list 'ac-modes 'enh-ruby-mode)
-    (setq ac-use-menu-map t)
-    (setq ac-use-fuzzy t)))
 
 ;; flycheck
 (leaf flycheck
@@ -761,6 +744,53 @@
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-envs
    '("PATH" "GOPATH" "LANG")))
+
+(leaf corfu
+  :doc "COmpletion in Region FUnction"
+  :req "emacs-27.1" "compat-29.1.4.4"
+  :tag "text" "completion" "matching" "convenience" "abbrev" "emacs>=27.1"
+  :url "https://github.com/minad/corfu"
+  :added "2025-04-05"
+  :emacs>= 27.1
+  :ensure t
+  :custom ((corfu-auto . t)
+           (corfu-preview-current . t)
+           (corfu-cycle . t)
+           (corfu-quit-no-match . nil)
+           (corfu-preselect . 'prompt)
+           (tab-always-indent . 'complete))
+  :init
+  (global-corfu-mode)
+  )
+
+(leaf codeium
+  :tag "out-of-MELPA"
+  :added "2025-05-02"
+  :el-get "Exafunction/codeium.el"
+  :init
+  (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+  :require t
+  :config
+  (setq use-dialog-box nil) ;; do not use popup boxes
+  ;; get codeium status in the modeline
+  (setq codeium-mode-line-enable
+        (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+  (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+  ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+  (setq codeium-api-enabled
+        (lambda (api)
+          (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+  ;; You can overwrite all the codeium configs!
+  ;; for example, we recommend limiting the string sent to codeium for better performance
+  (defun my-codeium/document/text ()
+    (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+  ;; if you change the text, you should also change the cursor_offset
+  ;; warning: this is measured by UTF-8 encoded bytes
+  (defun my-codeium/document/cursor_offset ()
+    (codeium-utf8-byte-length
+     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+  (setq codeium/document/text 'my-codeium/document/text)
+  (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
 
 (provide 'init)
 
