@@ -13,6 +13,7 @@ end
 
 config.use_ime = true
 config.font = wezterm.font "HackGen Console NF"
+config.font_size = 12
 -- ↑の設定で日本語入力が動かないことがあったので以下も追加しておく
 wezterm.font_with_fallback({
   "Noto Sans Mono CJK JP",
