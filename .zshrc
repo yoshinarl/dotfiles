@@ -51,7 +51,6 @@ alias g="git"
 alias ll="ls -lG"
 alias ls="ls -G"
 alias mv="mv -i"
-alias rm='trash -F'
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
@@ -133,6 +132,7 @@ export NRFSDK12_ROOT=~/Workspace/nRF5_SDK_12.3.0_d7731ad
 
 if uname -a | grep -sq "Ubuntu"; then
   # Ubuntu
+  alias rm='trash'
 elif [ "$(uname)" = "Darwin" ]; then
   # macOS
   eval "$(/opt/homebrew/bin/brew shellenv)"
