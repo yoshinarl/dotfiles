@@ -17,3 +17,4 @@
 
 # Mac
 .DS_Store
+.aider*
