@@ -110,7 +110,7 @@
 (leaf general
   :bind (
          ;; Returnでオートインデント
-         ("" . newline-and-indent)
+         ("" . newline-and-indent)
          ;; C-hをBSに
          ("" . backward-delete-char)
          ;; C-x C-gでM-x goto-line
@@ -165,11 +165,14 @@
 (leaf japanese
   :config
   (set-language-environment 'Japanese)
-  (set-default-coding-systems 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-buffer-file-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8))
+  (set-default-coding-systems 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8-unix)
+  (set-terminal-coding-system 'utf-8-unix)
+  (set-buffer-file-coding-system 'utf-8-unix)
+  (prefer-coding-system 'utf-8-unix)
+  ;; 文字エンコーディング選択プロンプトを抑制
+  (setq select-safe-coding-system-function nil)
+  (setq coding-system-for-write 'utf-8-unix))
 
 (leaf tab
   :setq (
