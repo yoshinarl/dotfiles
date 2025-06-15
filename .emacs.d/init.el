@@ -467,23 +467,6 @@
   :config
   (global-linum-mode t))
 
-;; auto-complete-mode
-(leaf auto-complete
-  :doc "Auto Completion for GNU Emacs"
-  :req "popup-0.5.0" "cl-lib-0.5"
-  :tag "convenience" "completion"
-  :url "https://github.com/auto-complete/auto-complete"
-  :added "2023-06-26"
-  :ensure t
-  :preface
-  (defun load-auto-complete nil
-    (require 'auto-complete)
-    (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-    (ac-config-default)
-    (add-to-list 'ac-modes 'text-mode)
-    (add-to-list 'ac-modes 'enh-ruby-mode)
-    (setq ac-use-menu-map t)
-    (setq ac-use-fuzzy t)))
 
 ;; flycheck
 (leaf flycheck
@@ -761,6 +744,24 @@
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-envs
    '("PATH" "GOPATH" "LANG")))
+
+(leaf corfu
+  :doc "COmpletion in Region FUnction"
+  :req "emacs-27.1" "compat-29.1.4.4"
+  :tag "text" "completion" "matching" "convenience" "abbrev" "emacs>=27.1"
+  :url "https://github.com/minad/corfu"
+  :added "2025-04-05"
+  :emacs>= 27.1
+  :ensure t
+  :custom ((corfu-auto . t)
+           (corfu-preview-current . t)
+           (corfu-cycle . t)
+           (corfu-quit-no-match . nil)
+           (corfu-preselect . 'prompt)
+           (tab-always-indent . 'complete))
+  :init
+  (global-corfu-mode)
+  )
 
 (provide 'init)
 
