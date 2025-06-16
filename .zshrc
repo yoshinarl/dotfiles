@@ -59,6 +59,10 @@ alias mv="mv -i"
 # ===== PATH設定 =====
 export PATH=/usr/local/bin:$PATH
 
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:~/.lmstudio/bin"
+# End of LM Studio CLI section
+
 # ===== Git設定 =====
 autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
 
