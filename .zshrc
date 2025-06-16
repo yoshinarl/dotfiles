@@ -63,6 +63,9 @@ export PATH=/usr/local/bin:$PATH
 export PATH="$PATH:~/.lmstudio/bin"
 # End of LM Studio CLI section
 
+# Added by Windsurf
+export PATH="~/.codeium/windsurf/bin:$PATH"
+
 # ===== Git設定 =====
 autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
 
