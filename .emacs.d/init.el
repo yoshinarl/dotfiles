@@ -813,12 +813,12 @@
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.cc
+ ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))
- '(package-selected-packages '(blackout claude-code el-get hydra leaf leaf-keywords))
  '(package-vc-selected-packages
-   '((claude-code :url "https://github.com/stevemolitor/claude-code.el")))
+   '((claude-code :url "https://github.com/stevemolitor/claude-code.el"
+                  :rev :newest)))
  '(session-use-package t nil (session)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
