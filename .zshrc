@@ -112,9 +112,8 @@ export YVM_DIR=/usr/local/opt/yvm
 export PATH="/usr/local/sbin:$PATH"
 
 # mise
-if [ -e "$HOME/.local/bin/mise" ]
-then
-    eval "$($HOME/.local/bin/mise activate zsh)"
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
 fi
 
 # ===== プロジェクト固有設定 =====
