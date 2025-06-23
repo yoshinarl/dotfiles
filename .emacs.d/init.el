@@ -798,6 +798,18 @@
   :bind
   ("C-c c" . claude-code-command-map))
 
+;; (leaf gptel
+;;   :doc "Interact with ChatGPT or other LLMs"
+;;   :req "emacs-27.1" "transient-0.7.4" "compat-29.1.4.1"
+;;   :tag "tools" "convenience" "emacs>=27.1"
+;;   :url "https://github.com/karthink/gptel"
+;;   :added "2025-06-23"
+;;   :emacs>= 27.1
+;;   :ensure t
+;;   :custom
+;;   :config
+;;   (setopt gptel-backend (gptel-make-gh-copilot "Copilot")))
+
 (provide 'init)
 
 (custom-set-variables
