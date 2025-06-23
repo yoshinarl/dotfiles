@@ -35,7 +35,8 @@
   (customize-set-variable
    'package-archives '(("org"   . "https://orgmode.org/elpa/")
                        ("melpa" . "https://melpa.org/packages/")
-                       ("gnu"   . "https://elpa.gnu.org/packages/")))
+                       ("gnu"   . "https://elpa.gnu.org/packages/")
+                       ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (package-initialize)
   (unless (package-installed-p 'leaf)
     (package-refresh-contents)
@@ -109,7 +110,7 @@
 (leaf general
   :bind (
          ;; Returnでオートインデント
-         ("" . newline-and-indent)
+         ("" . newline-and-indent)
          ;; C-hをBSに
          ("" . backward-delete-char)
          ;; C-x C-gでM-x goto-line
@@ -164,11 +165,14 @@
 (leaf japanese
   :config
   (set-language-environment 'Japanese)
-  (set-default-coding-systems 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-buffer-file-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8))
+  (set-default-coding-systems 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8-unix)
+  (set-terminal-coding-system 'utf-8-unix)
+  (set-buffer-file-coding-system 'utf-8-unix)
+  (prefer-coding-system 'utf-8-unix)
+  ;; 文字エンコーディング選択プロンプトを抑制
+  (setq select-safe-coding-system-function nil)
+  (setq coding-system-for-write 'utf-8-unix))
 
 (leaf tab
   :setq (
@@ -467,23 +471,6 @@
   :config
   (global-linum-mode t))
 
-;; auto-complete-mode
-(leaf auto-complete
-  :doc "Auto Completion for GNU Emacs"
-  :req "popup-0.5.0" "cl-lib-0.5"
-  :tag "convenience" "completion"
-  :url "https://github.com/auto-complete/auto-complete"
-  :added "2023-06-26"
-  :ensure t
-  :preface
-  (defun load-auto-complete nil
-    (require 'auto-complete)
-    (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-    (ac-config-default)
-    (add-to-list 'ac-modes 'text-mode)
-    (add-to-list 'ac-modes 'enh-ruby-mode)
-    (setq ac-use-menu-map t)
-    (setq ac-use-fuzzy t)))
 
 ;; flycheck
 (leaf flycheck
@@ -756,21 +743,72 @@
   :added "2023-06-28"
   :emacs>= 24.1
   :ensure t
-  :setq ((exec-path-from-shell-shell-name . "zsh"))
+  :setq ((exec-path-from-shell-shell-name . "zsh")
+         (exec-path-from-shell-arguments . '("-l" "-i")))
   :config
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-envs
    '("PATH" "GOPATH" "LANG")))
+
+(leaf corfu
+  :doc "COmpletion in Region FUnction"
+  :req "emacs-27.1" "compat-29.1.4.4"
+  :tag "text" "completion" "matching" "convenience" "abbrev" "emacs>=27.1"
+  :url "https://github.com/minad/corfu"
+  :added "2025-04-05"
+  :emacs>= 27.1
+  :ensure t
+  :custom ((corfu-auto . t)
+           (corfu-preview-current . t)
+           (corfu-cycle . t)
+           (corfu-quit-no-match . nil)
+           (corfu-preselect . 'prompt)
+           (tab-always-indent . 'complete))
+  :init
+  (global-corfu-mode)
+  )
+
+;; transient
+(leaf transient
+  :doc "Transient commands"
+  :req "emacs-26.1" "compat-29.1.4.4" "seq-2.24"
+  :tag "extensions" "emacs>=26.1"
+  :url "https://github.com/magit/transient"
+  :added "2025-06-16"
+  :emacs>= 26.1
+  :ensure t)
+
+;; eat
+(leaf eat
+  :doc "Emulate A Terminal, in a region, in a buffer and in Eshell"
+  :req "emacs-28.1" "compat-29.1.4.0"
+  :tag "terminals" "processes" "emacs>=28.1"
+  :url "https://codeberg.org/akib/emacs-eat"
+  :added "2025-06-16"
+  :emacs>= 28.1
+  :ensure t)
+
+(leaf claude-code
+  :tag "out-of-MELPA"
+  :added "2025-06-16"
+  :ensure t
+  :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
+  :config
+  (claude-code-mode)
+  :bind
+  ("C-c c" . claude-code-command-map))
 
 (provide 'init)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
+ ;; Your init file should contain only one such instance.cc
  ;; If there is more than one, they won't work right.
  '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))
- '(package-selected-packages '(blackout el-get hydra leaf-keywords leaf))
+ '(package-selected-packages '(blackout claude-code el-get hydra leaf leaf-keywords))
+ '(package-vc-selected-packages
+   '((claude-code :url "https://github.com/stevemolitor/claude-code.el")))
  '(session-use-package t nil (session)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
