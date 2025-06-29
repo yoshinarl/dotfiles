@@ -788,16 +788,6 @@
   :emacs>= 28.1
   :ensure t)
 
-(leaf claude-code
-  :tag "out-of-MELPA"
-  :added "2025-06-16"
-  :ensure t
-  :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
-  :config
-  (claude-code-mode)
-  :bind
-  ("C-c c" . claude-code-command-map))
-
 (provide 'init)
 
 (custom-set-variables
