@@ -788,6 +788,26 @@
   :emacs>= 28.1
   :ensure t)
 
+;; copilot.el
+(leaf copilot
+  :doc "An unofficial Copilot plugin"
+  :req "emacs-27.2" "editorconfig-0.8.2" "jsonrpc-1.0.14" "f-0.20.0"
+  :tag "copilot" "convenience" "emacs>=27.2"
+  :url "https://github.com/copilot-emacs/copilot.el"
+  :added "2025-06-29"
+  :emacs>= 27.2
+  :ensure t
+  :after editorconfig jsonrpc
+  :hook (prog-mode-hook . copilot-mode)
+  :bind ((:copilot-completion-map
+         ("<tab>" . 'copilot-accept-completion)
+         ("TAB" . 'copilot-accept-completion)
+         ("C-TAB" . 'copilot-accept-completion-by-word)
+         ("C-<tab>" . 'copilot-accept-completion-by-word)
+         ("M-n" . 'copilot-next-completion)
+         ("M-p" . 'copilot-previous-completion)))
+  :config (add-to-list 'copilot-major-mode-alist '("enh-ruby" . "ruby")))
+
 (provide 'init)
 
 (custom-set-variables
