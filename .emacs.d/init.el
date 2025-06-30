@@ -79,27 +79,12 @@
   (setq load-path (cons "~/.emacs.d/elisp" load-path)))
 
 ;; 環境変数パス
-(leaf env-path
-  :config
-  (dolist (dir
-           (list "/sbin" "/usr/sbin" "/bin" "/usr/bin" "/usr/local/bin"
-                 (expand-file-name "~/bin")
-                 (expand-file-name "~/.emacs.d/bin")))
-    (when (and
-           (file-exists-p dir)
-           (not (member dir exec-path)))
-      (setenv "PATH"
-              (concat dir ":"
-                      (getenv "PATH")))
-      (setq exec-path (append
-                       (list dir)
-                       exec-path)))))
-
-;; homebrew でインストールしたツールを使う
-;; (leaf homebrew-path
-;;   :config
-;;   (Add-to-list 'exec-path
-;;                (expand-file-name "/usr/local/bin")))
+(leaf exec-path-from-shell
+  :ensure t
+  :init
+  (exec-path-from-shell-initialize)
+  :custom
+  ((exec-path-from-shell-variables . '("PATH"))))
 
 ;; バックアップファイルを作らない
 (setq make-backup-files nil)
