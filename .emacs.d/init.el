@@ -446,16 +446,11 @@
 ;; |    package    |
 ;;  ---------------
 
-;; 行番号を表示
-(leaf linum
-  :doc "display line numbers in the left margin"
-  :tag "builtin"
-  :added "2023-06-26"
-  :require linum
-  :setq ((linum-format . "%5d"))
+;; 行番号を表示（高速な display-line-numbers を使用）
+(leaf display-line-numbers
+  :when (fboundp 'global-display-line-numbers-mode)
   :config
-  (global-linum-mode t))
-
+  (global-display-line-numbers-mode 1))
 
 ;; flycheck
 (leaf flycheck
