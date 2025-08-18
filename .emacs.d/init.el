@@ -308,7 +308,7 @@
   (add-to-list 'default-frame-alist
                '(background-color . "#333333"))
   ;; 背景透明
-  (set-frame-parameter nil 'alpha 95)
+  (set-frame-parameter nil 'alpha (if (eq system-type 'darwin) 95 100))
   ;; カーソルの色を設定します。
   (add-to-list 'default-frame-alist
                '(cursor-color . "SlateBlue2"))
