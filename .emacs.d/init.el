@@ -457,6 +457,11 @@
   :when (fboundp 'pixel-scroll-precision-mode)
   :config (pixel-scroll-precision-mode 1))
 
+;; フォントキャッシュ最適化（CJK/Nerd Font の描画カクつき軽減）
+(leaf font-cache
+  :tag "builtin"
+  :setq ((inhibit-compacting-font-caches . t)))
+
 ;; flycheck
 (leaf flycheck
   :doc "On-the-fly syntax checking"
