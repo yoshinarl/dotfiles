@@ -14,7 +14,21 @@
 /.emacs.d/history
 /.emacs.d/eln-cache/
 /.emacs.d/codeium/
+/.emacs.d/*.elc
+/.emacs.d/**/*.eln
 
 # Mac
 .DS_Store
 .aider*
+\#*#
+/.emacs.d/package-quickstart.el
+/.emacs.d/places
+/.emacs.d/bookmarks
+/.emacs.d/url/
+/.emacs.d/tramp
+/.emacs.d/server/
+/.emacs.d/eshell/
+/.emacs.d/undo-tree-history/
+/.emacs.d/var/
+/.emacs.d/straight/
+/.emacs.d/quelpa/
