@@ -171,13 +171,20 @@
                  (indent-tabs-mode)))
 
 ;; 括弧の自動補完
-;; leaf-convert-region するとなぜかうごかない
-(setq skeleton-pair t)
-(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "`") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
+(leaf skeleton
+  :tag "builtin"
+  :require skeleton
+  :setq ((skeleton-pair . t))
+  :bind (("(" . skeleton-pair-insert-maybe)
+         ("[" . skeleton-pair-insert-maybe)
+         ("{" . skeleton-pair-insert-maybe)
+         ("`" . skeleton-pair-insert-maybe)
+         ("\"" . skeleton-pair-insert-maybe))
+  :config
+  ;; バッククォートは `` で閉じる（エントリ形式: (KEY _ CLOSE)）
+  (setq skeleton-pair-alist
+        (cons '(?` _ ?`)
+              (assq-delete-all ?` skeleton-pair-alist))))
 
 ;; フォント変更->HackGen Console NF
 (leaf font
