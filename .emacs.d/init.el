@@ -452,6 +452,11 @@
   :config
   (global-display-line-numbers-mode 1))
 
+;; 入力・描画のスムーズ化（Emacs 29+）
+(leaf pixel-scroll-precision
+  :when (fboundp 'pixel-scroll-precision-mode)
+  :config (pixel-scroll-precision-mode 1))
+
 ;; flycheck
 (leaf flycheck
   :doc "On-the-fly syntax checking"
