@@ -21,13 +21,13 @@ wezterm.font_with_fallback({
 })
 
 config.keys = {
-  -- +D で横分割
+  -- ALT+SHIFT+S で横分割
   {
-    key = "D",
-    mods = "ALT",
+    key = "S",
+    mods = "ALT|SHIFT",
     action = wezterm.action.SplitHorizontal { domain = "CurrentPaneDomain" },
   },
-  -- Cmd+Shift+D で縦分割
+  -- ALT+Shift+D で縦分割
   {
     key = "D",
     mods = "ALT|SHIFT",
