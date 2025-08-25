@@ -35,7 +35,8 @@
   (customize-set-variable
    'package-archives '(("org"   . "https://orgmode.org/elpa/")
                        ("melpa" . "https://melpa.org/packages/")
-                       ("gnu"   . "https://elpa.gnu.org/packages/")))
+                       ("gnu"   . "https://elpa.gnu.org/packages/")
+                       ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (package-initialize)
   (unless (package-installed-p 'leaf)
     (package-refresh-contents)
@@ -78,27 +79,12 @@
   (setq load-path (cons "~/.emacs.d/elisp" load-path)))
 
 ;; 環境変数パス
-(leaf env-path
-  :config
-  (dolist (dir
-           (list "/sbin" "/usr/sbin" "/bin" "/usr/bin" "/usr/local/bin"
-                 (expand-file-name "~/bin")
-                 (expand-file-name "~/.emacs.d/bin")))
-    (when (and
-           (file-exists-p dir)
-           (not (member dir exec-path)))
-      (setenv "PATH"
-              (concat dir ":"
-                      (getenv "PATH")))
-      (setq exec-path (append
-                       (list dir)
-                       exec-path)))))
-
-;; homebrew でインストールしたツールを使う
-;; (leaf homebrew-path
-;;   :config
-;;   (Add-to-list 'exec-path
-;;                (expand-file-name "/usr/local/bin")))
+(leaf exec-path-from-shell
+  :ensure t
+  :init
+  (exec-path-from-shell-initialize)
+  :custom
+  ((exec-path-from-shell-variables . '("PATH"))))
 
 ;; バックアップファイルを作らない
 (setq make-backup-files nil)
@@ -109,7 +95,7 @@
 (leaf general
   :bind (
          ;; Returnでオートインデント
-         ("" . newline-and-indent)
+         ("" . newline-and-indent)
          ;; C-hをBSに
          ("" . backward-delete-char)
          ;; C-x C-gでM-x goto-line
@@ -164,11 +150,14 @@
 (leaf japanese
   :config
   (set-language-environment 'Japanese)
-  (set-default-coding-systems 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-buffer-file-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8))
+  (set-default-coding-systems 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8-unix)
+  (set-terminal-coding-system 'utf-8-unix)
+  (set-buffer-file-coding-system 'utf-8-unix)
+  (prefer-coding-system 'utf-8-unix)
+  ;; 文字エンコーディング選択プロンプトを抑制
+  (setq select-safe-coding-system-function nil)
+  (setq coding-system-for-write 'utf-8-unix))
 
 (leaf tab
   :setq (
@@ -182,13 +171,20 @@
                  (indent-tabs-mode)))
 
 ;; 括弧の自動補完
-;; leaf-convert-region するとなぜかうごかない
-(setq skeleton-pair t)
-(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "`") 'skeleton-pair-insert-maybe)
-(global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
+(leaf skeleton
+  :tag "builtin"
+  :require skeleton
+  :setq ((skeleton-pair . t))
+  :bind (("(" . skeleton-pair-insert-maybe)
+         ("[" . skeleton-pair-insert-maybe)
+         ("{" . skeleton-pair-insert-maybe)
+         ("`" . skeleton-pair-insert-maybe)
+         ("\"" . skeleton-pair-insert-maybe))
+  :config
+  ;; バッククォートは `` で閉じる（エントリ形式: (KEY _ CLOSE)）
+  (setq skeleton-pair-alist
+        (cons '(?` _ ?`)
+              (assq-delete-all ?` skeleton-pair-alist))))
 
 ;; フォント変更->HackGen Console NF
 (leaf font
@@ -319,7 +315,7 @@
   (add-to-list 'default-frame-alist
                '(background-color . "#333333"))
   ;; 背景透明
-  (set-frame-parameter nil 'alpha 95)
+  (set-frame-parameter nil 'alpha (if (eq system-type 'darwin) 95 100))
   ;; カーソルの色を設定します。
   (add-to-list 'default-frame-alist
                '(cursor-color . "SlateBlue2"))
@@ -457,33 +453,21 @@
 ;; |    package    |
 ;;  ---------------
 
-;; 行番号を表示
-(leaf linum
-  :doc "display line numbers in the left margin"
-  :tag "builtin"
-  :added "2023-06-26"
-  :require linum
-  :setq ((linum-format . "%5d"))
+;; 行番号を表示（高速な display-line-numbers を使用）
+(leaf display-line-numbers
+  :when (fboundp 'global-display-line-numbers-mode)
   :config
-  (global-linum-mode t))
+  (global-display-line-numbers-mode 1))
 
-;; auto-complete-mode
-(leaf auto-complete
-  :doc "Auto Completion for GNU Emacs"
-  :req "popup-0.5.0" "cl-lib-0.5"
-  :tag "convenience" "completion"
-  :url "https://github.com/auto-complete/auto-complete"
-  :added "2023-06-26"
-  :ensure t
-  :preface
-  (defun load-auto-complete nil
-    (require 'auto-complete)
-    (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-    (ac-config-default)
-    (add-to-list 'ac-modes 'text-mode)
-    (add-to-list 'ac-modes 'enh-ruby-mode)
-    (setq ac-use-menu-map t)
-    (setq ac-use-fuzzy t)))
+;; 入力・描画のスムーズ化（Emacs 29+）
+(leaf pixel-scroll-precision
+  :when (fboundp 'pixel-scroll-precision-mode)
+  :config (pixel-scroll-precision-mode 1))
+
+;; フォントキャッシュ最適化（CJK/Nerd Font の描画カクつき軽減）
+(leaf font-cache
+  :tag "builtin"
+  :setq ((inhibit-compacting-font-caches . t)))
 
 ;; flycheck
 (leaf flycheck
@@ -756,11 +740,70 @@
   :added "2023-06-28"
   :emacs>= 24.1
   :ensure t
-  :setq ((exec-path-from-shell-shell-name . "zsh"))
+  :setq ((exec-path-from-shell-shell-name . "zsh")
+         (exec-path-from-shell-arguments . '("-l" "-i")))
   :config
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-envs
    '("PATH" "GOPATH" "LANG")))
+
+(leaf corfu
+  :doc "COmpletion in Region FUnction"
+  :req "emacs-27.1" "compat-29.1.4.4"
+  :tag "text" "completion" "matching" "convenience" "abbrev" "emacs>=27.1"
+  :url "https://github.com/minad/corfu"
+  :added "2025-04-05"
+  :emacs>= 27.1
+  :ensure t
+  :custom ((corfu-auto . t)
+           (corfu-preview-current . t)
+           (corfu-cycle . t)
+           (corfu-quit-no-match . nil)
+           (corfu-preselect . 'prompt)
+           (tab-always-indent . 'complete))
+  :init
+  (global-corfu-mode)
+  )
+
+;; transient
+(leaf transient
+  :doc "Transient commands"
+  :req "emacs-26.1" "compat-29.1.4.4" "seq-2.24"
+  :tag "extensions" "emacs>=26.1"
+  :url "https://github.com/magit/transient"
+  :added "2025-06-16"
+  :emacs>= 26.1
+  :ensure t)
+
+;; eat
+(leaf eat
+  :doc "Emulate A Terminal, in a region, in a buffer and in Eshell"
+  :req "emacs-28.1" "compat-29.1.4.0"
+  :tag "terminals" "processes" "emacs>=28.1"
+  :url "https://codeberg.org/akib/emacs-eat"
+  :added "2025-06-16"
+  :emacs>= 28.1
+  :ensure t)
+
+;; copilot.el
+(leaf copilot
+  :doc "An unofficial Copilot plugin"
+  :req "emacs-27.2" "editorconfig-0.8.2" "jsonrpc-1.0.14" "f-0.20.0"
+  :tag "copilot" "convenience" "emacs>=27.2"
+  :url "https://github.com/copilot-emacs/copilot.el"
+  :added "2025-06-29"
+  :emacs>= 27.2
+  :ensure t
+  :after editorconfig jsonrpc
+  :hook (prog-mode-hook . copilot-mode)
+  :bind ((:copilot-completion-map
+         ("<tab>" . 'copilot-accept-completion)
+         ("TAB" . 'copilot-accept-completion)
+         ("C-TAB" . 'copilot-accept-completion-by-word)
+         ("C-<tab>" . 'copilot-accept-completion-by-word)
+         ("M-n" . 'copilot-next-completion)
+         ("M-p" . 'copilot-previous-completion)))
+  :config (add-to-list 'copilot-major-mode-alist '("enh-ruby" . "ruby")))
 
 (provide 'init)
 
@@ -770,7 +813,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))
- '(package-selected-packages '(blackout el-get hydra leaf-keywords leaf))
+ '(package-vc-selected-packages
+   '((claude-code :url "https://github.com/stevemolitor/claude-code.el"
+                  :rev :newest)))
  '(session-use-package t nil (session)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
