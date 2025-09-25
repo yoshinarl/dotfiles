@@ -17,6 +17,8 @@
 /.emacs.d/tree-sitter/
 /.emacs.d/*.elc
 /.emacs.d/**/*.eln
+/npm/typescript-ls/node_modules/
+/npm/typescript-ls/package-lock.json
 
 # Mac
 .DS_Store

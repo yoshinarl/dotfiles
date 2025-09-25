@@ -66,6 +66,12 @@ export PATH="$PATH:~/.lmstudio/bin"
 # Added by Windsurf
 export PATH="~/.codeium/windsurf/bin:$PATH"
 
+# TypeScript language tools (.dotfiles npm prefix)
+ts_ls_bin="$HOME/.dotfiles/npm/typescript-ls/node_modules/.bin"
+if [ -d "$ts_ls_bin" ]; then
+  export PATH="$ts_ls_bin:$PATH"
+fi
+
 # ===== Git設定 =====
 autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
 
