@@ -14,6 +14,7 @@
 /.emacs.d/history
 /.emacs.d/eln-cache/
 /.emacs.d/codeium/
+/.emacs.d/tree-sitter/
 /.emacs.d/*.elc
 /.emacs.d/**/*.eln
 

@@ -731,6 +731,97 @@
   (setopt markdown-indent-on-enter 'indent-and-new-item)
   (setopt markdown-list-indent-width 2))
 
+;; TypeScript / TSX
+(leaf typescript-setup
+  :preface
+  (defun my/eglot-format-buffer-safe ()
+    (when (and (fboundp 'eglot-managed-p) (eglot-managed-p))
+      (eglot-format-buffer)))
+  :config
+  ;; LSP client
+  (leaf eglot
+    :ensure t
+    :hook ((typescript-ts-mode-hook . eglot-ensure)
+           (tsx-ts-mode-hook . eglot-ensure)
+           (typescript-mode-hook . eglot-ensure)
+           (web-mode-hook . (lambda ()
+                              (when (and buffer-file-name
+                                         (string-match-p "\\.tsx\\'" buffer-file-name))
+                                (eglot-ensure))))))
+  (with-eval-after-load 'eglot
+    ;; Use typescript-language-server for TSX when using web-mode
+    (add-to-list 'eglot-server-programs
+                 '((web-mode) . ("typescript-language-server" "--stdio"))))
+
+  (with-eval-after-load 'treesit
+    ;; Emacs 29 ships tree-sitter ABI 14; stick to 0.20.x tags there and
+    ;; switch to upstream master when ABI 15+ is available in Emacs 30+.
+    (let ((ts-sources (if (>= emacs-major-version 30)
+                          '((typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
+                                           "master" "typescript/src"))
+                            (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript"
+                                    "master" "tsx/src"))
+                            (json . ("https://github.com/tree-sitter/tree-sitter-json"
+                                     "master" "src"))
+                            (css . ("https://github.com/tree-sitter/tree-sitter-css"
+                                    "master" "src"))
+                            (html . ("https://github.com/tree-sitter/tree-sitter-html"
+                                     "master" "src"))
+                            (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"
+                                     "master" "src"))
+                            (python . ("https://github.com/tree-sitter/tree-sitter-python"
+                                       "master" "src")))
+                        '((typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
+                                         "v0.23.2" "typescript/src"))
+                          (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript"
+                                  "v0.23.2" "tsx/src"))
+                          (json . ("https://github.com/tree-sitter/tree-sitter-json"
+                                   "v0.24.8" "src"))
+                          (css . ("https://github.com/tree-sitter/tree-sitter-css"
+                                  "v0.23.2" "src"))
+                          (html . ("https://github.com/tree-sitter/tree-sitter-html"
+                                   "v0.23.2" "src"))
+                          (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"
+                                   "v0.5.0" "src"))
+                          (python . ("https://github.com/tree-sitter/tree-sitter-python"
+                                     "v0.23.6" "src"))))))
+      (dolist (entry ts-sources)
+        (add-to-list 'treesit-language-source-alist entry))
+      (dolist (lang '(typescript tsx json css html yaml python))
+        (unless (treesit-language-available-p lang)
+          (ignore-errors
+            (treesit-install-language-grammar lang))))))
+
+  ;; Prefer tree-sitter modes when available (Emacs 29+)
+  (if (and (fboundp 'treesit-available-p)
+           (treesit-available-p)
+           (fboundp 'typescript-ts-mode))
+      (progn
+        (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+        (add-to-list 'auto-mode-alist '("\\.mts\\'" . typescript-ts-mode))
+        (add-to-list 'auto-mode-alist '("\\.cts\\'" . typescript-ts-mode))
+        (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+        (setq typescript-ts-mode-indent-offset 2))
+    ;; Fallback: classic modes from MELPA
+    (leaf typescript-mode
+      :ensure t
+      :mode "\\.ts\\'"
+      :config (setq typescript-indent-level 2))
+    (leaf web-mode
+      :ensure t
+      :mode "\\.tsx\\'"
+      :config
+      (setq web-mode-code-indent-offset 2
+            web-mode-markup-indent-offset 2
+            web-mode-css-indent-offset 2)))
+
+  ;; Use Flymake via Eglot for diagnostics in TS buffers
+  (dolist (hook '(typescript-ts-mode-hook tsx-ts-mode-hook typescript-mode-hook web-mode-hook))
+    (add-hook hook (lambda ()
+                     (when (bound-and-true-p flycheck-mode)
+                       (flycheck-mode -1))
+                     (add-hook 'before-save-hook #'my/eglot-format-buffer-safe nil t)))))
+
 ;; exec-path-from-shell
 (leaf exec-path-from-shell
   :doc "Get environment variables such as $PATH from the shell"
