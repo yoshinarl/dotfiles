@@ -56,16 +56,6 @@ alias ll="ls -lG"
 alias ls="ls -G"
 alias mv="mv -i"
 
-# ===== PATH設定 =====
-export PATH=/usr/local/bin:$PATH
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:~/.lmstudio/bin"
-# End of LM Studio CLI section
-
-# Added by Windsurf
-export PATH="~/.codeium/windsurf/bin:$PATH"
-
 # TypeScript language tools (.dotfiles npm prefix)
 ts_ls_bin="$HOME/.dotfiles/npm/typescript-ls/node_modules/.bin"
 if [ -d "$ts_ls_bin" ]; then
@@ -121,14 +111,6 @@ alias gitwip="git add . && git commit -m 'WIP'"
 # ===== 外部ツール設定 =====
 export YVM_DIR=/usr/local/opt/yvm
 [ -r $YVM_DIR/yvm.sh ] && . $YVM_DIR/yvm.sh
-
-export PATH="/usr/local/sbin:$PATH"
-
-# ===== プロジェクト固有設定 =====
-
-# NRFSDK v12.3.0 用パス
-# https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download から DL されていること
-export NRFSDK12_ROOT=~/Workspace/nRF5_SDK_12.3.0_d7731ad
 
 # ===== プラットフォーム固有設定 =====
 if uname -a | grep -sq "Ubuntu"; then
