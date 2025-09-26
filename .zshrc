@@ -124,16 +124,6 @@ export YVM_DIR=/usr/local/opt/yvm
 
 export PATH="/usr/local/sbin:$PATH"
 
-# anyenv (プログラミング言語バージョン管理)
-if [ -e "$HOME/.anyenv" ]
-then
-  export PATH="${HOME}/.anyenv/bin:$PATH"
-  if command -v anyenv 1>/dev/null 2>&1
-  then
-    eval "$(anyenv init -)"
-  fi
-fi
-
 # ===== プロジェクト固有設定 =====
 
 # NRFSDK v12.3.0 用パス
