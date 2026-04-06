@@ -1,5 +1,6 @@
 # Emacs
 .\#*
+\#*#
 *~
 /.emacs.d/.session
 /.emacs.d/auto-save-list/
@@ -17,13 +18,6 @@
 /.emacs.d/tree-sitter/
 /.emacs.d/*.elc
 /.emacs.d/**/*.eln
-/npm/typescript-ls/node_modules/
-/npm/typescript-ls/package-lock.json
-
-# Mac
-.DS_Store
-.aider*
-\#*#
 /.emacs.d/package-quickstart.el
 /.emacs.d/places
 /.emacs.d/bookmarks
@@ -35,3 +29,18 @@
 /.emacs.d/var/
 /.emacs.d/straight/
 /.emacs.d/quelpa/
+
+/npm/typescript-ls/node_modules/
+/npm/typescript-ls/package-lock.json
+
+# Mac
+.DS_Store
+.aider*
+
+# Claude
+.claude/settings.local.json
+.claude/hooks/local/
+.claude/commands/local/
+.claude/logs/
+.claude/*.log
+.claude/audit-*.log
