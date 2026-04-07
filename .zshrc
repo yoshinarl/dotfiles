@@ -135,3 +135,10 @@ fi
 # ===== 起動時処理 =====
 # シェル立ち上げ時に稼働時間を出力
 uptime
+
+# https://github.com/rails/rails/issues/38560
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+# https://github.com/rails/rails/issues/38560#issuecomment-590236052
+export DISABLE_SPRING=true
+
