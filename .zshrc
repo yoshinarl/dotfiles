@@ -5,6 +5,9 @@ compinit
 autoload -U select-word-style
 select-word-style bash
 
+# ===== PATH =====
+PATH="$HOME/.local/bin:$PATH"
+
 # ===== 履歴設定 =====
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
