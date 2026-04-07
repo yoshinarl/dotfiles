@@ -621,11 +621,11 @@
             '(lambda nil
                (ruby-electric-mode t))))
 
-;; ruby-block
-(leaf ruby-clock
+;; ruby-block (el-get でインストール済み、load-path に直接追加)
+(add-to-list 'load-path "~/.emacs.d/el-get/ruby-block.el")
+(leaf ruby-block
   :added "2023-06-28"
-  :el-get h3poteto/ruby-block.el
-  :require ruby-block
+  :require t
   :setq ((ruby-block-highlight-toggle . t))
   :config
   (ruby-block-mode t))
