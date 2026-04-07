@@ -10,3 +10,4 @@ ln -is $PWD/.pryrc ~/.pryrc
 ln -is $PWD/.Brewfile ~/.Brewfile
 ln -is $PWD/.tigrc ~/.tigrc
 ln -is $PWD/.wezterm.lua ~/.wezterm.lua
+ln -is $PWD/.tmux.conf ~/.tmux.conf
