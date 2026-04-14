@@ -840,6 +840,25 @@
   (exec-path-from-shell-copy-envs
    '("PATH" "GOPATH" "LANG")))
 
+;; mise は precmd フック経由で PATH を変更するため exec-path-from-shell では取得できない。
+;; mise exec 経由で管理対象言語すべてを含む PATH を取得して反映する。
+(let* ((mise (expand-file-name "~/.local/bin/mise"))
+       (path (when (file-executable-p mise)
+               (string-trim
+                (shell-command-to-string
+                 (concat mise " exec -- printenv PATH 2>/dev/null"))))))
+  (when (and path (not (string-empty-p path)))
+    (setenv "PATH" path)
+    (setq exec-path (append (split-string path path-separator t) exec-path))))
+
+;; mise shims を exec-path の先頭に追加する。
+;; shims はプロジェクトの .tool-versions を参照して正しいバージョンのツールを起動するため、
+;; flycheck (rubocop 等) が project ごとに適切な Ruby で実行される。
+(let ((mise-shims (expand-file-name "~/.local/share/mise/shims")))
+  (when (file-directory-p mise-shims)
+    (add-to-list 'exec-path mise-shims)
+    (setenv "PATH" (concat mise-shims path-separator (getenv "PATH")))))
+
 (leaf corfu
   :doc "COmpletion in Region FUnction"
   :req "emacs-27.1" "compat-29.1.4.4"
