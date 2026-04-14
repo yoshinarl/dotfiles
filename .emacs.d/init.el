@@ -754,23 +754,25 @@
                  '((web-mode) . ("typescript-language-server" "--stdio"))))
 
   (with-eval-after-load 'treesit
-    ;; Emacs 29 ships tree-sitter ABI 14; stick to 0.20.x tags there and
-    ;; switch to upstream master when ABI 15+ is available in Emacs 30+.
+    ;; railwaycat Emacs 30.1 bundles libtree-sitter 0.24.x (ABI 14).
+    ;; tree-sitter 0.25+ grammars use ABI 15 and cause version-mismatch warnings.
+    ;; Pin all grammar sources to ABI-14-compatible versions until a newer
+    ;; Emacs.app bundles libtree-sitter 0.25+ (ABI 15).
     (let ((ts-sources (if (>= emacs-major-version 30)
                           '((typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
-                                           "master" "typescript/src"))
+                                           "v0.23.2" "typescript/src"))
                             (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript"
-                                    "master" "tsx/src"))
+                                    "v0.23.2" "tsx/src"))
                             (json . ("https://github.com/tree-sitter/tree-sitter-json"
-                                     "master" "src"))
+                                     "v0.24.8" "src"))
                             (css . ("https://github.com/tree-sitter/tree-sitter-css"
-                                    "master" "src"))
+                                    "v0.23.2" "src"))
                             (html . ("https://github.com/tree-sitter/tree-sitter-html"
-                                     "master" "src"))
+                                     "v0.23.2" "src"))
                             (yaml . ("https://github.com/ikatyang/tree-sitter-yaml"
-                                     "master" "src"))
+                                     "v0.5.0" "src"))
                             (python . ("https://github.com/tree-sitter/tree-sitter-python"
-                                       "master" "src")))
+                                       "v0.23.6" "src")))
                         '((typescript . ("https://github.com/tree-sitter/tree-sitter-typescript"
                                          "v0.23.2" "typescript/src"))
                           (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript"
