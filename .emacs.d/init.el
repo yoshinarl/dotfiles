@@ -373,7 +373,7 @@
         (forward-line)
         (transpose-lines -1))
       (move-to-column col)
-      (previous-line)))
+      (forward-line -1)))
 
   :bind (("M-P" . move-line-up)
          ("M-N" . move-line-down)))
