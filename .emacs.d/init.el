@@ -898,6 +898,12 @@
          ("M-p" . 'copilot-previous-completion)))
   :config (add-to-list 'copilot-major-mode-alist '("enh-ruby" . "ruby")))
 
+;; ローカル環境専用設定（リポジトリ管理外）
+;; ~/.emacs.d/init.local.el が存在すれば読み込む
+(let ((local-init (expand-file-name "init.local.el" user-emacs-directory)))
+  (when (file-readable-p local-init)
+    (load local-init)))
+
 (provide 'init)
 
 (custom-set-variables

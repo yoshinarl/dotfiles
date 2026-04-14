@@ -16,6 +16,7 @@
 /.emacs.d/eln-cache/
 /.emacs.d/codeium/
 /.emacs.d/tree-sitter/
+/.emacs.d/init.local.el
 /.emacs.d/*.elc
 /.emacs.d/**/*.eln
 /.emacs.d/package-quickstart.el
