@@ -586,7 +586,25 @@
   :ensure t
   :mode (("\\(?:\\.rb\\|ru\\|rake\\|thor\\|jbuilder\\|gemspec\\|podspec\\|/\\(?:Gem\\|Rake\\|Cap\\|Thor\\|Vagrant\\|Guard\\|Pod\\)file\\)\\'" . enh-ruby-mode))
   :interpreter (("ruby" . enh-ruby-mode))
-  :require enh-ruby-mode)
+  :require enh-ruby-mode
+  :config
+  ;; enh-ruby-mode 20260107+ から face 定義が erm-define-faces に移動し
+  ;; enh-ruby-mode-hook 経由で遅延定義されるようになった。
+  ;; color-darken-name が face-attribute の返す :unspecified でエラーになると
+  ;; face 未定義のまま fontification が走り "Invalid face reference" が出る。
+  ;; パッケージロード時に呼んで先に定義しておく。失敗時は :inherit でフォールバック。
+  ;; defface は冪等なのでパッケージ側が修正されても無害。
+  (condition-case nil
+      (erm-define-faces)
+    (error
+     (defface enh-ruby-op-face
+       '((t :inherit font-lock-keyword-face))
+       "Face used to highlight operators like + and ||"
+       :group 'enh-ruby)
+     (defface enh-ruby-string-delimiter-face
+       '((t :inherit font-lock-string-face))
+       "Face used to highlight string delimiters like quotes and %Q."
+       :group 'enh-ruby))))
 
 ;; "encoding を自動挿入しない"
 (leaf remove-enh-magic-comment
