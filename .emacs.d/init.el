@@ -605,6 +605,10 @@
        '((t :inherit font-lock-string-face))
        "Face used to highlight string delimiters like quotes and %Q."
        :group 'enh-ruby))))
+  (set-face-attribute 'enh-ruby-op-face nil
+                      :foreground "#ff40ff")
+  (set-face-attribute 'enh-ruby-string-delimiter-face nil
+                      :foreground "#C71585")
 
 ;; "encoding を自動挿入しない"
 (leaf remove-enh-magic-comment
