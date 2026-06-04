@@ -146,6 +146,12 @@
   :config
   (windmove-default-keybindings))
 
+;; ウィンドウ配置の履歴管理（C-x 1 で最大化、C-c ← で元に戻す）
+(leaf winner
+  :tag "builtin"
+  :config
+  (winner-mode 1))
+
 ;; 日本語設定
 (leaf japanese
   :config
