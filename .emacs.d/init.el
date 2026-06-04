@@ -567,7 +567,8 @@
   :emacs>= 27.1
   :ensure t
   :bind (("C-s" . consult-line)
-         ("C-x b" . consult-buffer))
+         ("C-x b" . consult-buffer)
+         ("C-c f" . consult-find))
   )
 
 ;; recentf
