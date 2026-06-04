@@ -700,46 +700,22 @@
   :config
   (global-git-gutter+-mode t))
 
-;; elscreen
-(leaf elscreen
-  :doc "Emacs window session manager"
-  :req "emacs-24"
-  :tag "convenience" "window" "emacs>=24"
-  :url "https://github.com/knu/elscreen"
-  :added "2023-06-28"
-  :emacs>= 24
-  :ensure t
-  :require elscreen
-  :setq (
-         ;; タブの先頭に[X]を表示しない
-         (elscreen-tab-display-kill-screen)
-         ;; header-lineの先頭に[<->]を表示しない
-         (elscreen-tab-display-control)
-         ;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
-         (elscreen-buffer-to-nickname-alist quote
-                                            (("^dired-mode$" lambda nil
-                                              (format "Dired(%s)" dired-directory))
-                                             ("^Info-mode$" lambda nil
-                                              (format "Info(%s)"
-                                                      (file-name-nondirectory Info-current-file)))
-                                             ("^mew-draft-mode$" lambda nil
-                                              (format "Mew(%s)"
-                                                      (buffer-name
-                                                       (current-buffer))))
-                                             ("^mew-" . "Mew")
-                                             ("^irchat-" . "IRChat")
-                                             ("^liece-" . "Liece")
-                                             ("^lookup-" . "Lookup")))
-         (elscreen-mode-to-nickname-alist quote
-                                          (("[Ss]hell" . "shell")
-                                           ("compilation" . "compile")
-                                           ("-telnet" . "telnet")
-                                           ("dict" . "OnlineDict")
-                                           ("*WL:Message*" . "Wanderlust"))))
-  :config
-  ;; プレフィクスキーはC-z
-  (setq elscreen-prefix-key (kbd "C-z"))
-  (elscreen-start))
+;; tab-bar-mode（フレーム上部にウィンドウレイアウトのタブ）
+(leaf tab-bar
+  :tag "builtin"
+  :init
+  (tab-bar-mode 1)
+  :custom
+  ;; タブが2つ以上のときだけタブバーを表示
+  (tab-bar-show . 1)
+  (tab-bar-new-tab-choice . "*scratch*"))
+
+;; tab-line-mode（ウィンドウ上部にバッファのタブ）
+(leaf tab-line
+  :tag "builtin"
+  :init
+  (global-tab-line-mode 1)
+  :bind (("C-x t w" . tab-line-close-tab)))
 
 ;; protobuf-mode
 (leaf protobuf-mode
