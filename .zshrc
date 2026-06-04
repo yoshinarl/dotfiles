@@ -152,3 +152,7 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
+
+# jj
+source <(jj util completion zsh)
+export NPM_CONFIG_IGNORE_SCRIPTS=true
