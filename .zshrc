@@ -146,3 +146,9 @@ export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 # https://github.com/rails/rails/issues/38560#issuecomment-590236052
 export DISABLE_SPRING=true
 
+# pnpm
+export PNPM_HOME="~/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
