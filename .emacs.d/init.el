@@ -566,9 +566,18 @@
   :added "2023-07-01"
   :emacs>= 27.1
   :ensure t
-  :bind (("C-s" . consult-line)
+  :bind (("C-s" . my/consult-line)
          ("C-x b" . consult-buffer)
          ("C-c f" . consult-find))
+  :preface
+  (defvar my/consult-line-last-buffer nil)
+  (defun my/consult-line ()
+    (interactive)
+    ;; 同じバッファなら前回の検索文字列を初期値にする。別バッファなら空で起動。
+    (let ((initial (when (eq (current-buffer) my/consult-line-last-buffer)
+                     (car consult--line-history))))
+      (setq my/consult-line-last-buffer (current-buffer))
+      (consult-line initial)))
   )
 
 ;; recentf
