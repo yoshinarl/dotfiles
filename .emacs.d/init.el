@@ -952,6 +952,11 @@
   (when (file-readable-p local-init)
     (load local-init)))
 
+;; Claude Code などの editor で Emacs を開けるように server として動かしておく
+(require 'server)
+(setq server-socket-dir (expand-file-name "server" user-emacs-directory))
+(unless (server-running-p) (server-start))
+
 (provide 'init)
 
 (custom-set-variables
