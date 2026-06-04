@@ -14,3 +14,6 @@ ln -is $PWD/.tmux.conf ~/.tmux.conf
 
 mkdir -p ~/.config
 ln -is $PWD/.config/ghostty ~/.config/ghostty
+
+mkdir -p ~/.config/mise
+ln -is $PWD/.config/mise/config.toml ~/.config/mise/config.toml

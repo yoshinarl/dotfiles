@@ -1,0 +1,11 @@
+[tools]
+node = "latest"
+npm = "latest"
+pnpm = "latest"
+"npm:pnpm" = "latest"
+python = "3.14.2"
+ruby = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["node", "ruby", "npm", "pnpm", "terraform", "yarn"]
+minimum_release_age = "7d"
