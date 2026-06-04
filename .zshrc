@@ -136,6 +136,10 @@ fi
 # シェル立ち上げ時に稼働時間を出力
 uptime
 
+# Added by LM Studio CLI (lms)
+export PATH="/$HOME/.lmstudio/bin:$PATH"
+# End of LM Studio CLI section
+
 # https://github.com/rails/rails/issues/38560
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
