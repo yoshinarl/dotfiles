@@ -715,7 +715,21 @@
   :tag "builtin"
   :init
   (global-tab-line-mode 1)
-  :bind (("C-x t w" . tab-line-close-tab)))
+  :bind (("C-x t w" . tab-line-close-tab))
+  :preface
+  (defun my/tab-line-buffer-p (buffer)
+    (let ((name (buffer-name buffer)))
+      (not (or (string-prefix-p " " name)
+               (string-match-p
+                (rx bos (or "*GNU Emacs*" "*scratch*" "*Messages*" "*Help*"
+                            "*Completions*" "*Backtrace*" "*eldoc*" "*xref*")
+                    eos)
+                name)
+               (string-match-p "\\*eglot\\|\\*EGLOT\\|\\*flycheck\\|\\*git-gutter" name)))))
+  (defun my/tab-line-tabs ()
+    (seq-filter #'my/tab-line-buffer-p (tab-line-tabs-fixed-window-buffers)))
+  :config
+  (setq tab-line-tabs-function #'my/tab-line-tabs))
 
 ;; protobuf-mode
 (leaf protobuf-mode
