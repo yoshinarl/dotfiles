@@ -1,0 +1,2 @@
+#!/bin/bash
+exec op run --env-file ~/.env -- sh -c "BUNDLE_RUBYGEMS__PKG__GITHUB__COM=yoshinarl:\${GITHUB_PACKAGES_TOKEN} mise exec -- ruby-lsp $*"

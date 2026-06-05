@@ -758,6 +758,7 @@
     :hook ((typescript-ts-mode-hook . eglot-ensure)
            (tsx-ts-mode-hook . eglot-ensure)
            (typescript-mode-hook . eglot-ensure)
+           (enh-ruby-mode-hook . eglot-ensure)
            (web-mode-hook . (lambda ()
                               (when (and buffer-file-name
                                          (string-match-p "\\.tsx\\'" buffer-file-name))
@@ -765,7 +766,11 @@
   (with-eval-after-load 'eglot
     ;; Use typescript-language-server for TSX when using web-mode
     (add-to-list 'eglot-server-programs
-                 '((web-mode) . ("typescript-language-server" "--stdio"))))
+                 '((web-mode) . ("typescript-language-server" "--stdio")))
+    ;; Use ruby-lsp-op if available (injects GITHUB_PACKAGES_TOKEN via 1Password),
+    ;; otherwise fall back to ruby-lsp directly.
+    (add-to-list 'eglot-server-programs
+                 `((enh-ruby-mode ruby-mode) . (,(or (executable-find "ruby-lsp-op") "ruby-lsp")))))
 
   (with-eval-after-load 'treesit
     ;; railwaycat Emacs 30.1 bundles libtree-sitter 0.24.x (ABI 14).

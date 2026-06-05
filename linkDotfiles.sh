@@ -19,3 +19,6 @@ ln -is $PWD/.config/ghostty ~/.config/ghostty
 
 mkdir -p ~/.config/mise
 ln -is $PWD/.config/mise/config.toml ~/.config/mise/config.toml
+
+mkdir -p ~/.local/bin
+ln -is $PWD/ruby-lsp-op ~/.local/bin/ruby-lsp-op
