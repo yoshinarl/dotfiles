@@ -493,7 +493,7 @@
   (with-eval-after-load 'flycheck
     (custom-set-variables
      '(flycheck-disabled-checkers
-       '(javascript-jshint javascript-jscs)))))
+       '(javascript-jshint javascript-jscs ruby-reek)))))
 
 ;; vertico
 (leaf vertico
@@ -949,7 +949,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs))
+ '(flycheck-disabled-checkers '(javascript-jshint javascript-jscs ruby-reek))
  '(package-vc-selected-packages
    '((claude-code :url "https://github.com/stevemolitor/claude-code.el"
                   :rev :newest)))
