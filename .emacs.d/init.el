@@ -715,7 +715,9 @@
   :tag "builtin"
   :init
   (global-tab-line-mode 1)
-  :bind (("C-x t w" . tab-line-close-tab))
+  :bind (("C-x t w"   . tab-line-close-tab)
+         ("<C-tab>"   . tab-line-switch-to-next-tab)
+         ("<C-S-tab>" . tab-line-switch-to-prev-tab))
   :preface
   (defun my/tab-line-buffer-p (buffer)
     (let ((name (buffer-name buffer)))
