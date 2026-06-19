@@ -944,6 +944,14 @@
   :emacs>= 28.1
   :ensure t)
 
+;; editorconfig
+;; プロジェクトの .editorconfig を読み、indent_size / indent_style / end_of_line を
+;; バッファローカルに適用する
+(leaf editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
 ;; copilot.el
 (leaf copilot
   :doc "An unofficial Copilot plugin"
