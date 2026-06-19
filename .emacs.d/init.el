@@ -571,13 +571,24 @@
          ("C-c f" . consult-find))
   :preface
   (defvar my/consult-line-last-buffer nil)
+  (defvar my/consult-line-last-quit t)
   (defun my/consult-line ()
     (interactive)
-    ;; 同じバッファなら前回の検索文字列を初期値にする。別バッファなら空で起動。
-    (let ((initial (when (eq (current-buffer) my/consult-line-last-buffer)
+    ;; 以下の条件で初期値をセットする
+    ;; - 別バッファ → 空
+    ;; - 同じバッファ + 前回 C-g → 空
+    ;; - 同じバッファ + 前回 Enter/C-j → 前回の検索文字列
+    (let ((initial (when (and (eq (current-buffer) my/consult-line-last-buffer)
+                              (not my/consult-line-last-quit))
                      (car consult--line-history))))
       (setq my/consult-line-last-buffer (current-buffer))
-      (consult-line initial)))
+      (condition-case _
+          (progn
+            (consult-line initial)
+            (setq my/consult-line-last-quit nil))
+        (quit
+         (setq my/consult-line-last-quit t)
+         (signal 'quit nil)))))
   )
 
 ;; recentf
