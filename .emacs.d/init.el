@@ -690,16 +690,16 @@
   :hook ((after-init-hook . session-initialize))
   :require session)
 
-;; git-gutter-fringe+
-(leaf git-gutter-fringe+
-  :doc "Fringe version of git-gutter+.el"
-  :req "git-gutter+-0.1" "fringe-helper-1.0.1"
-  :url "https://github.com/nonsequitur/git-gutter-fringe-plus"
-  :added "2023-06-28"
+;; diff-hl
+(leaf diff-hl
+  :doc "Highlight uncommitted changes using VC"
+  :url "https://github.com/dgutov/diff-hl"
+  :added "2026-07-05"
   :ensure t
-  :require git-gutter-fringe+
+  :hook ((magit-post-refresh-hook . diff-hl-magit-post-refresh))
   :config
-  (global-git-gutter+-mode t))
+  (global-diff-hl-mode 1)
+  (diff-hl-flydiff-mode 1))
 
 ;; tab-bar-mode（フレーム上部にウィンドウレイアウトのタブ）
 (leaf tab-bar
