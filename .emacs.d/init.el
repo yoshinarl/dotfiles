@@ -659,10 +659,11 @@
             '(lambda nil
                (ruby-electric-mode t))))
 
-;; ruby-block (el-get でインストール済み、load-path に直接追加)
-(add-to-list 'load-path "~/.emacs.d/el-get/ruby-block.el")
+;; ruby-block
 (leaf ruby-block
   :added "2023-06-28"
+  :vc (ruby-block
+       :url "https://github.com/juszczakn/ruby-block.git")
   :require t
   :setq ((ruby-block-highlight-toggle . t))
   :config
