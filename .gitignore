@@ -45,3 +45,6 @@
 .claude/logs/
 .claude/*.log
 .claude/audit-*.log
+
+# MCP
+.playwright-mcp/
