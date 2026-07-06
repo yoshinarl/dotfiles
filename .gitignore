@@ -30,6 +30,8 @@
 /.emacs.d/var/
 /.emacs.d/straight/
 /.emacs.d/quelpa/
+/.emacs.d/custom.el
+/.emacs.d/projects
 
 /npm/typescript-ls/node_modules/
 /npm/typescript-ls/package-lock.json
