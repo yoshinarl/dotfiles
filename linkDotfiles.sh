@@ -23,5 +23,8 @@ ln -is $PWD/.config/mise/config.toml ~/.config/mise/config.toml
 mkdir -p ~/.config/herdr
 ln -is $PWD/.config/herdr/config.toml ~/.config/herdr/config.toml
 
+mkdir -p ~/.claude
+ln -is $PWD/.claude/settings.json ~/.claude/settings.json
+
 mkdir -p ~/.local/bin
 ln -is $PWD/ruby-lsp-op ~/.local/bin/ruby-lsp-op
