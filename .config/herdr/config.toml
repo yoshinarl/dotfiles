@@ -1,0 +1,51 @@
+onboarding = false
+# herdr configuration
+# 手元の .tmux.conf / .wezterm.lua の流儀に寄せてカスタマイズ
+
+[ui]
+# tmux.conf の `set -g mouse on` と同じ挙動なのでherdrのデフォルト(true)を維持
+mouse_capture = true
+
+# tmux.conf で pane-border-status top + pane_id 常時表示にしている習慣に合わせる
+show_agent_labels_on_pane_borders = true
+
+agent_panel_sort = "spaces"
+
+[keys]
+# tmux.conf の `bind r source-file ~/.tmux.conf` (prefix+r でconfig再読込)と同じ役割。
+# herdrのデフォルトは prefix+shift+r なのでそのまま維持
+# reload_config = "prefix+shift+r"
+
+# tmux.conf の `bind -n S-Left/Down/Up/Right select-pane` (prefixなしの瞬時ペイン移動)相当。
+# 実際に動作するかは次回 herdr 起動時に要確認(動かなければこのブロックを削除)
+focus_pane_left = "shift+left"
+focus_pane_down = "shift+down"
+focus_pane_up = "shift+up"
+focus_pane_right = "shift+right"
+
+# tmux.conf の `bind | split-window -h`(左右分割)相当。デフォルトの prefix+v を上書き。
+# 注: herdr公式ドキュメントの記名済み記号一覧(minus, comma, ampersand, plus, backtick)に
+# "|" は含まれていないため、動作しない場合は herdr起動中に prefix+? でキーバインド一覧を確認するか、
+# "prefix+shift+backslash" 等への変更を検討
+split_vertical = "prefix+|"
+
+# タブ切り替え: Ctrl+Tab等の直接バインドはmacOS/Ghostty/AltTabアプリで軒並み予約済みだったため断念。
+# Herdrデフォルトの prefix+n(次) / prefix+p(前) をそのまま使う
+
+[advanced]
+# tmux.conf の history-limit 100000 (行数ベース)に合わせて、
+# herdrのデフォルト10MBよりスクロールバックを増量
+scrollback_limit_bytes = 50000000
+
+[experimental]
+# prefixモード中は一時的にmacOSの入力ソースをASCII対応レイアウトに切り替え、
+# prefixモードを抜けたら元の入力ソースに戻す。日本語IME使用中でもprefixコマンドが確実に効くようにする機能。
+# macOS限定・ベストエフォート(公式にexperimental扱い)
+#
+# 注: Google日本語入力の「英字(Google)」だけが有効な状態だと切り替わらなかった。
+# システム設定 > キーボード > 入力ソース に標準の「ABC」を別途追加したら動作した。
+# (切り替え先として素のASCIIキーボードレイアウトが必要らしい)
+switch_ascii_input_source_in_prefix = true
+
+[ui.toast]
+delivery = "system"
