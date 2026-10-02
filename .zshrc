@@ -155,6 +155,9 @@ esac
 
 # jj
 source <(jj util completion zsh)
+
+# herdr
+source <(herdr completion zsh)
 export NPM_CONFIG_IGNORE_SCRIPTS=true
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
