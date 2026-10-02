@@ -161,3 +161,4 @@ source <(herdr completion zsh)
 export NPM_CONFIG_IGNORE_SCRIPTS=true
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+source ~/.safe-chain/scripts/init-posix.sh # Safe-chain Zsh initialization script
