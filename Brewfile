@@ -147,8 +147,6 @@ brew "zsh"
 cask "1password-cli"
 # Collection of apps and services for photography, design, video, web, and UX
 cask "adobe-creative-cloud"
-# Application launcher and productivity software
-cask "alfred"
 # Enable Windows-like alt-tab
 cask "alt-tab"
 # Application uninstaller
@@ -175,8 +173,6 @@ cask "deskpad"
 cask "devin-desktop"
 # Voice and text chat software
 cask "discord"
-# Assign keys, and then decorate and label them
-cask "elgato-stream-deck"
 # Collaborative team software
 cask "figma"
 # Utility for customizing which browser to start
@@ -184,14 +180,10 @@ cask "finicky"
 # Web browser
 cask "firefox"
 cask "font-hackgen-nerd"
-# Set of tools to manage resources and applications hosted on Google Cloud
-cask "gcloud-cli"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Client for the Google Drive storage service
 cask "google-drive"
-# Terminal emulator as alternative to Apple's Terminal app
-cask "iterm2"
 # Menu bar manager
 cask "jordanbaird-ice"
 # Open-source screen recorder built with web technology
@@ -200,12 +192,8 @@ cask "kap"
 cask "karabiner-elements"
 # Discover, download, and run local LLMs
 cask "lm-studio"
-# Software for Logitech devices
-cask "logi-options+"
 # Set of CPU, memory, disk, and network monitoring tools
 cask "menumeters"
-# Online collaborative whiteboard platform
-cask "miro"
 # Tool to control external monitor brightness & volume
 cask "monitorcontrol"
 # App to write, plan, collaborate, and get organised
@@ -230,10 +218,6 @@ cask "tableplus"
 cask "terraform-linters/tap/tflint", trusted: true
 # Open-source code editor
 cask "visual-studio-code"
-# Multimedia player
-cask "vlc"
-# GPU-accelerated cross-platform terminal emulator and multiplexer
-cask "wezterm"
 mas "CotEditor", id: 1024640650
 mas "Display Menu", id: 549083868
 mas "GarageBand", id: 682658836
@@ -243,11 +227,4 @@ mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Skitch", id: 425955336
 mas "ToyViewer", id: 414298354
-mas "TweetDeck", id: 485812721
-vscode "github.copilot-chat"
-vscode "ms-azuretools.vscode-containers"
-vscode "ms-azuretools.vscode-docker"
-vscode "ms-ceintl.vscode-language-pack-ja"
-vscode "ms-vscode-remote.remote-containers"
-go "github.com/open-pomodoro/openpomodoro-cli/cmd/pomodoro"
 cargo "rubydex-mcp"
