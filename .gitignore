@@ -50,3 +50,6 @@
 
 # MCP
 .playwright-mcp/
+
+# env file
+.env
