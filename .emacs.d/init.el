@@ -710,7 +710,8 @@
   :url "https://github.com/dgutov/diff-hl"
   :added "2026-07-05"
   :ensure t
-  :hook ((magit-post-refresh-hook . diff-hl-magit-post-refresh))
+  :hook ((magit-post-refresh-hook . diff-hl-magit-post-refresh)
+         (find-file-hook . diff-hl-update))
   :config
   (global-diff-hl-mode 1)
   (diff-hl-flydiff-mode 1))
