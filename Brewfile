@@ -145,8 +145,6 @@ brew "yq"
 brew "zsh"
 # Command-line interface for 1Password
 cask "1password-cli"
-# Collection of apps and services for photography, design, video, web, and UX
-cask "adobe-creative-cloud"
 # Enable Windows-like alt-tab
 cask "alt-tab"
 # Application uninstaller
