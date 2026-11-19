@@ -6,8 +6,8 @@
 /.emacs.d/auto-save-list/
 /.emacs.d/elpa/
 /.emacs.d/projectile-bookmarks.eld
-/.emacs.d/network-security.data
-/.emacs.d/recentf
+/.emacs.d/network-security.eld
+/.emacs.d/recentf.eld
 /.emacs.d/transient/
 /.emacs.d/.lsp-*
 /.emacs.d/.cache/
@@ -31,7 +31,7 @@
 /.emacs.d/straight/
 /.emacs.d/quelpa/
 /.emacs.d/custom.el
-/.emacs.d/projects
+/.emacs.d/projects.eld
 
 /npm/typescript-ls/node_modules/
 /npm/typescript-ls/package-lock.json
