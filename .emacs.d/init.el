@@ -787,6 +787,7 @@
   ;; LSP client
   (leaf eglot
     :ensure t
+    :custom (eglot-connect-timeout . 60)
     :hook ((typescript-ts-mode-hook . eglot-ensure)
            (tsx-ts-mode-hook . eglot-ensure)
            (typescript-mode-hook . eglot-ensure)
